@@ -1,0 +1,902 @@
+<title>Toupie &amp; Culbuto</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout : feuille de papier millimétré ; colonne de lecture étroite, « paillasses » de simulation plus larges (figure + réglages). */
+:root{
+  --paper:#F1F4F1; --grid:#DCE5E0; --surface:#FFFFFF; --ink:#1C272B; --muted:#56666A; --line:#C5D1CC;
+  --brass:#A86F12; --brass-soft:#F4E6CC; --force:#C33A2C; --steel:#1F6B86; --ok:#2E7D4F; --ok-soft:#DDEFE3; --ko-soft:#F7E0DC;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12191B; --grid:#1B2528; --surface:#1A2326; --ink:#E3EAE7; --muted:#9AAAAA; --line:#2E3C40;
+  --brass:#E2A945; --brass-soft:#3A2E17; --force:#FF6F5F; --steel:#62B6D3; --ok:#6BCB8F; --ok-soft:#173326; --ko-soft:#3B1F1B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12191B; --grid:#1B2528; --surface:#1A2326; --ink:#E3EAE7; --muted:#9AAAAA; --line:#2E3C40;
+  --brass:#E2A945; --brass-soft:#3A2E17; --force:#FF6F5F; --steel:#62B6D3; --ok:#6BCB8F; --ok-soft:#173326; --ko-soft:#3B1F1B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--steel)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:780px;margin:0 auto}
+.wide{max-width:1120px;margin:0 auto}
+
+/* barre de navigation */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:14px;padding-block:8px;max-width:1120px;margin:0 auto}
+.brand{font-family:var(--f-display);font-weight:800;font-size:17px;white-space:nowrap;letter-spacing:-.01em}
+.steps{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:thin}
+.steps a{flex:none;text-decoration:none;color:var(--muted);font-size:13px;padding:4px 9px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.steps a:hover{border-color:var(--line);color:var(--ink)}
+.steps a.done{color:var(--ok)}
+.steps a.done::before{content:"✓ "}
+.chrono{display:flex;align-items:center;gap:8px;flex:none;font-family:var(--f-mono);font-size:13px}
+.chrono button{font:inherit}
+
+/* en-tête */
+header.hero{padding-block:48px 28px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,8vw,76px);line-height:.95;letter-spacing:-.03em;margin:.2em 0 .25em;text-wrap:balance}
+h1 .amp{color:var(--brass)}
+.lead{font-size:19px;max-width:62ch;color:var(--ink)}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.6vw,40px);line-height:1.05;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:700;font-size:21px;margin:1.6em 0 .3em;text-wrap:balance}
+p{margin:.6em 0}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+section.part{padding-block:56px 24px;border-top:2px solid var(--ink);margin-top:24px;scroll-margin-top:64px}
+.part-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;margin-bottom:12px}
+.duree{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.06em;padding:2px 8px;border-radius:4px;border:1px solid currentColor}
+.tag.ana{color:var(--steel)} .tag.syn{color:var(--brass)} .tag.rec{color:var(--ok)}
+
+/* formule */
+.formula{font-family:var(--f-mono);font-size:19px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--brass);padding:12px 16px;margin:14px 0;overflow-x:auto}
+.fexpr{font-weight:600;margin-bottom:8px}
+.units{list-style:none;margin:0;padding:0;font-family:var(--f-body);font-size:15px;display:grid;gap:4px}
+.units li{display:grid;grid-template-columns:5.5em minmax(0,1fr) minmax(0,15em);gap:10px;border-top:1px dotted var(--line);padding-top:4px}
+.units b{font-family:var(--f-mono);color:var(--brass)}
+.units em{font-style:normal;color:var(--muted)}
+.sch{width:150px;max-width:100%;height:auto;display:block;flex:none}
+.ex{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:14px 18px;margin:16px 0}
+.ex h4{margin:0;font-family:var(--f-display);font-size:18px}
+.ex>.muted{margin:2px 0 10px;font-size:15px}
+.ex-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.ex-item{margin:0;display:flex;gap:12px;align-items:center;background:var(--paper);border-radius:6px;padding:10px;min-width:0}
+.ex-item figcaption{min-width:0;font-size:14px}
+.ex-item dl{margin:4px 0;display:grid;gap:2px}
+.ex-item dl div{display:flex;gap:8px}
+.ex-item dt{font-family:var(--f-mono);font-weight:600;color:var(--brass);min-width:1.2em}
+.ex-item dd{margin:0;font-family:var(--f-mono);font-size:13px}
+.ex-res{margin:4px 0 0;font-family:var(--f-mono);font-weight:600;color:var(--steel);font-size:15px}
+.ex-note{display:block;color:var(--muted);font-size:13px}
+.ex-take{margin:10px 0 0;font-weight:700;font-size:15px}
+@media (max-width:480px){.ex-item{flex-direction:column;align-items:flex-start}}
+.sch .sl{font:700 11px var(--f-mono);fill:var(--steel)}
+.sch .st{font:600 9px var(--f-mono);fill:var(--ink)}
+.fnote{font-family:var(--f-body);font-size:14px;color:var(--muted);margin:8px 0 0}
+@media (max-width:600px){.units li{grid-template-columns:4.5em minmax(0,1fr)}.units em{grid-column:2}}
+.formula small{display:block;font-family:var(--f-body);font-size:14px;color:var(--muted);margin-top:4px}
+.v-force{color:var(--force);font-weight:700} .v-g{color:var(--brass);font-weight:700} .v-c{color:var(--steel);font-weight:700}
+
+/* paillasse = simulation */
+.bench{background:var(--surface);border:1px solid var(--line);border-radius:6px;margin:22px auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);overflow:hidden}
+.bench .fig{position:relative;min-width:0;border-right:1px solid var(--line);background:var(--paper)}
+.bench canvas{display:block;width:100%;height:340px}
+.bench .ctrl{padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.bench .ctrl h4{margin:0;font-family:var(--f-display);font-size:18px}
+.field{display:flex;flex-direction:column;gap:2px}
+.field label{font-size:14px;display:flex;justify-content:space-between;gap:8px}
+.field label output{font-family:var(--f-mono);font-variant-numeric:tabular-nums;color:var(--brass);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--brass)}
+select,input[type=text],textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 8px;width:100%}
+textarea{min-height:84px;resize:vertical}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:var(--f-body);font-size:15px;font-weight:700;cursor:pointer;border-radius:4px;padding:7px 14px;border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+button.ghost{background:transparent;color:var(--ink)}
+button:hover{filter:brightness(1.12)}
+.readout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;border-top:1px dashed var(--line);padding-top:10px}
+.readout div{display:flex;flex-direction:column;min-width:0}
+.readout span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.readout b{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:16px;font-weight:600}
+.verdict{font-weight:700;padding:8px 10px;border-radius:4px;font-size:15px}
+.verdict.good{background:var(--ok-soft);color:var(--ok)}
+.verdict.bad{background:var(--ko-soft);color:var(--force)}
+.verdict.mid{background:var(--brass-soft);color:var(--brass)}
+.legend{position:absolute;left:10px;top:8px;font-size:12px;display:flex;gap:10px;flex-wrap:wrap;background:color-mix(in srgb,var(--surface) 85%,transparent);padding:3px 8px;border-radius:4px}
+.legend i{font-style:normal;font-weight:700}
+
+/* encadrés */
+.box{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:14px 18px;margin:18px 0}
+.box h4{margin:0 0 4px;font-family:var(--f-display);font-size:17px}
+.box.home{border-left:5px solid var(--steel)}
+.box.design{border-left:5px solid var(--brass)}
+.box.link{border-left:5px solid var(--ok)}
+.box ul,.box ol{margin:.4em 0;padding-left:1.2em}
+
+/* auto-vérification */
+.check{border:1px dashed var(--line);border-radius:6px;padding:14px 18px;margin:18px 0;background:var(--surface)}
+.check .q{font-weight:700;margin-top:0}
+.check label{display:flex;gap:8px;align-items:flex-start;padding:3px 0;font-size:16px}
+.check input{margin-top:6px;accent-color:var(--brass)}
+.fb{margin:.5em 0 0;font-size:15px}
+.fb.ok{color:var(--ok)} .fb.ko{color:var(--force)}
+
+table.plan{width:100%;border-collapse:collapse;font-size:15px;background:var(--surface)}
+table.plan th,table.plan td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.plan th{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+table.plan td.mono{white-space:nowrap}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+
+.comp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.comp div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;min-width:0}
+.comp b{display:block;font-family:var(--f-display);font-size:18px}
+
+.carnet{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.carnet .full{grid-column:1/-1}
+.done-row{display:flex;justify-content:flex-end;margin-top:20px}
+.done-row label{display:flex;gap:8px;align-items:center;font-size:15px;font-weight:700;cursor:pointer}
+footer{padding-block:40px 60px;color:var(--muted);font-size:14px}
+
+@media (max-width:820px){
+  .bench{grid-template-columns:1fr}
+  .bench .fig{border-right:0;border-bottom:1px solid var(--line)}
+  .bench canvas{height:290px}
+  .comp,.carnet{grid-template-columns:1fr}
+  .brand{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+html{scroll-behavior:smooth}
+</style>
+
+<nav class="bar wrap" aria-label="Étapes de la séance">
+  <div class="bar-in">
+    <span class="brand">Toupie &amp; Culbuto</span>
+    <div class="steps" id="steps">
+      <a href="#intro" data-k="intro">Départ</a>
+      <a href="#poids" data-k="poids">1 · Poids</a>
+      <a href="#gravite" data-k="gravite">2 · Centre de gravité</a>
+      <a href="#moment" data-k="moment">3 · Moment</a>
+      <a href="#culbuto" data-k="culbuto">4 · Culbuto</a>
+      <a href="#toupie" data-k="toupie">5 · Toupie</a>
+      <a href="#recherche" data-k="recherche">6 · Recherche</a>
+      <a href="#carnet" data-k="carnet">7 · Carnet</a>
+      <a href="#qcm" data-k="qcm">8 · QCM</a>
+    </div>
+    <div class="chrono"><span id="chronoTxt" aria-live="off">00:00</span><button class="ghost" id="chronoBtn" type="button">Démarrer</button></div>
+  </div>
+</nav>
+
+<div class="wrap">
+<header class="hero col" id="intro">
+  <div class="eyebrow">DN MADe Objet · 1re année · Physique-chimie · séance à distance · ≈ 2 h</div>
+  <h1>Toupie <span class="amp">&amp;</span> Culbuto</h1>
+  <p class="lead">L'un tient debout parce qu'il tourne, l'autre se relève parce qu'il est lesté. À votre retour à l'atelier, vous fabriquerez les deux. Aujourd'hui, vous apprenez pourquoi ils fonctionnent, pour faire des choix de conception que vous saurez défendre.</p>
+
+  <h3>Ce qui sera évalué</h3>
+  <div class="comp">
+    <div><span class="tag ana">ANA</span><b>Analyser</b>Expliquer un comportement observé (il tombe, il se relève, il ralentit) avec les bonnes grandeurs physiques.</div>
+    <div><span class="tag syn">SYN</span><b>Synthétiser</b>Relier les notions entre elles et en tirer des choix de forme, de masse et de matériau.</div>
+    <div><span class="tag rec">REC</span><b>Rechercher</b>Trouver une information dans une ressource en ligne, la vérifier, citer la source.</div>
+  </div>
+
+  <h3>Déroulé conseillé</h3>
+  <div class="tablewrap">
+  <table class="plan">
+    <thead><tr><th>Temps</th><th>Étape</th><th>Ce que vous faites</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">0:00</td><td>Départ</td><td>Lire cette page d'accueil, démarrer le chrono en haut à droite.</td></tr>
+      <tr><td class="mono">0:05</td><td>1 · Poids</td><td>Calculer un poids, comparer Terre et Lune.</td></tr>
+      <tr><td class="mono">0:15</td><td>2 · Centre de gravité</td><td>Faire basculer un objet, chercher le centre de gravité d'un carton.</td></tr>
+      <tr><td class="mono">0:30</td><td>3 · Moment d'une force</td><td>Équilibrer une balançoire, simulation PhET.</td></tr>
+      <tr><td class="mono">0:45</td><td>4 · Culbuto</td><td>Régler le lest jusqu'à ce qu'il se relève.</td></tr>
+      <tr><td class="mono">1:05</td><td>5 · Toupie</td><td>Moment cinétique, précession, durée de rotation.</td></tr>
+      <tr><td class="mono">1:30</td><td>6 · Recherche</td><td>Mission documentaire, 4 réponses sourcées.</td></tr>
+      <tr><td class="mono">1:40</td><td>7 · Carnet</td><td>Rédiger vos choix de conception argumentés.</td></tr>
+      <tr><td class="mono">1:50</td><td>8 · QCM</td><td>QCM sur Pronote.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="muted">Préparez une feuille, un crayon, un morceau de carton, du fil et un trombone : deux petites expériences se font chez vous. Cochez « Étape terminée » à la fin de chaque partie ; votre progression reste enregistrée dans ce navigateur.</p>
+</header>
+
+<!-- ============ 1 POIDS ============ -->
+<section class="part col" id="poids">
+  <div class="part-head"><h2>1 · Le poids, une force</h2><span class="duree">≈ 10 min</span></div>
+  <p>Une <b>force</b> est une action capable de mettre un objet en mouvement, de le freiner, de le déformer ou de le faire tourner. On la représente par une flèche (un <b>vecteur</b>) : un point d'application, une direction, un sens et une valeur en <b>newtons (N)</b>.</p>
+  <p>La Terre attire tout objet vers son centre. Cette force à distance s'appelle le <b>poids</b>. Elle est verticale, dirigée vers le bas, et s'applique en un point particulier de l'objet : son <b>centre de gravité G</b>.</p>
+  <div class="formula"><div class="fexpr">P = m × g</div><ul class="units"><li><b>P</b><span>poids</span><em>newton (N)</em></li><li><b>m</b><span>masse de l'objet</span><em>kilogramme (kg)</em></li><li><b>g</b><span>intensité de la pesanteur : 9,81 sur Terre, 1,62 sur la Lune</span><em>newton par kilogramme (N/kg)</em></li></ul><p class="fnote">Exemple : m = 0,200 kg sur Terre → P = 0,200 × 9,81 ≈ 1,96 N. Attention : une masse en grammes se convertit d'abord en kg (200 g = 0,200 kg).</p></div>
+  <p>Attention à ne pas confondre : la <b>masse</b> (kg) est une quantité de matière, la même partout. Le <b>poids</b> (N) dépend de l'endroit où l'on se trouve.</p>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvPoids" aria-label="Objet posé avec la flèche de son poids"></canvas>
+      <div class="legend"><i class="v-force">→ P</i><i class="v-g">● G</i></div></div>
+    <div class="ctrl">
+      <h4>Calculer un poids</h4>
+      <div class="field"><label for="pMasse">Masse de l'objet <output id="pMasseO">250 g</output></label><input id="pMasse" type="range" min="10" max="1500" step="10" value="250"></div>
+      <div class="field"><label for="pAstre">Lieu</label>
+        <select id="pAstre"><option value="9.81">Terre (g = 9,81 N/kg)</option><option value="1.62">Lune (g = 1,62 N/kg)</option><option value="3.71">Mars (g = 3,71 N/kg)</option><option value="24.8">Jupiter (g = 24,8 N/kg)</option></select></div>
+      <div class="readout"><div><span>Masse</span><b id="pR1">0,250 kg</b></div><div><span>Poids</span><b id="pR2">2,45 N</b></div></div>
+      <p class="muted" style="font-size:14px;margin:0">Repère utile : une pomme de 100 g pèse environ 1 N sur Terre.</p>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <div class="check" data-answer="c" data-ok="Oui. La masse ne change pas (200 g partout) ; seul g change : 0,200 × 1,62 ≈ 0,32 N." data-ko="Relisez la différence masse / poids : la masse reste 0,200 kg, on multiplie par g de la Lune.">
+    <p class="q">Votre toupie a une masse de 200 g. Quel est son poids sur la Lune ?</p>
+    <label><input type="radio" name="c1" value="a"> 200 g</label>
+    <label><input type="radio" name="c1" value="b"> 1,96 N</label>
+    <label><input type="radio" name="c1" value="c"> environ 0,32 N</label>
+    <label><input type="radio" name="c1" value="d"> 324 N</label>
+    <button type="button" class="ghost">Vérifier</button><p class="fb" aria-live="polite"></p>
+  </div>
+  <div class="box link"><h4>Animation à explorer · 5 min</h4>
+    <p><a href="https://phet.colorado.edu/fr/simulations/forces-and-motion-basics" target="_blank" rel="noopener">PhET · Forces et mouvement : les bases</a>. Onglet « Forces nettes » : faites tirer deux équipes de force égale. Que se passe-t-il ? Notez la phrase qui résume la situation : quand les forces se compensent, l'objet…</p></div>
+  <div class="done-row"><label><input type="checkbox" data-done="poids"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 2 CENTRE DE GRAVITÉ ============ -->
+<section class="part col" id="gravite">
+  <div class="part-head"><h2>2 · Le centre de gravité</h2><span class="duree">≈ 15 min</span></div>
+  <p>Chaque petit morceau d'un objet a son propre poids. Tout se passe comme si la somme de tous ces petits poids s'appliquait en un seul point : le <b>centre de gravité G</b>.</p>
+  <p>La façon la plus simple de le trouver : <b>G est le point où il faut poser le doigt pour que l'objet tienne en équilibre.</b> Essayez avec une règle : posée sur un doigt, elle tient en son milieu. Scotchez une gomme à un bout : il faut déplacer le doigt vers la gomme.</p>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvG" aria-label="Règle portant deux masses en équilibre sur un doigt placé sous G"></canvas>
+      <div class="legend"><i class="v-g">▲ G = point d'équilibre</i></div></div>
+    <div class="ctrl">
+      <h4>Où se trouve G ?</h4>
+      <p class="muted" style="margin:0;font-size:14px">Une règle de 30 cm (masse négligeable) porte deux masses.</p>
+      <div class="field"><label for="gM1">Masse A <output id="gM1O">100 g</output></label><input id="gM1" type="range" min="50" max="400" step="50" value="100"></div>
+      <div class="field"><label for="gX1">Position de A <output id="gX1O">5 cm</output></label><input id="gX1" type="range" min="0" max="14" step="1" value="5"></div>
+      <div class="field"><label for="gM2">Masse B <output id="gM2O">100 g</output></label><input id="gM2" type="range" min="50" max="400" step="50" value="100"></div>
+      <div class="field"><label for="gX2">Position de B <output id="gX2O">25 cm</output></label><input id="gX2" type="range" min="16" max="30" step="1" value="25"></div>
+      <div class="readout"><div><span>Position de G</span><b id="gR1">—</b></div><div><span>Distances à G</span><b id="gR2">—</b></div></div>
+      <p id="gTxt" style="margin:0;font-size:15px"></p>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <h3>Ce qu'il faut retenir</h3>
+  <ul>
+    <li>Deux masses <b>égales</b> : G est pile <b>au milieu</b>.</li>
+    <li>Une masse <b>deux fois plus lourde</b> : G est <b>deux fois plus près</b> d'elle que de l'autre.</li>
+    <li>Plus une masse est lourde, plus elle « attire » G vers elle. Un objet homogène et symétrique (boule, cube, disque) a son G au centre.</li>
+  </ul>
+  <p class="muted" style="font-size:15px">Pour ceux qui aiment les calculs : G est la moyenne des positions, chaque position comptant autant de fois que sa masse. Exemple : 100 g à 5 cm et 300 g à 25 cm donnent (100×5 + 300×25) / 400 = 20 cm.</p>
+  <h3>La règle d'or de l'équilibre posé</h3>
+  <p>Un objet posé reste debout tant que la <b>verticale passant par G</b> tombe à l'intérieur de sa <b>base d'appui</b> (la surface délimitée par ses points de contact avec le sol). Dès qu'elle sort de cette base, le poids fait tourner l'objet autour de son arête : il bascule.</p>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvBasc" aria-label="Objet incliné sur son arête, verticale passant par G"></canvas>
+      <div class="legend"><i class="v-g">● G</i><i class="v-force">→ P</i><i class="v-c">┆ verticale de G</i></div></div>
+    <div class="ctrl">
+      <h4>Le test du basculement</h4>
+      <div class="field"><label for="bLarg">Largeur de la base <output id="bLargO">8 cm</output></label><input id="bLarg" type="range" min="3" max="16" step="0.5" value="8"></div>
+      <div class="field"><label for="bHaut">Hauteur de G au-dessus du sol <output id="bHautO">10 cm</output></label><input id="bHaut" type="range" min="2" max="20" step="0.5" value="10"></div>
+      <div class="field"><label for="bAng">Inclinaison donnée à la main <output id="bAngO">0°</output></label><input id="bAng" type="range" min="0" max="70" step="1" value="0"></div>
+      <div class="readout"><div><span>Angle limite</span><b id="bR1">—</b></div><div><span>État</span><b id="bR2">—</b></div></div>
+      <div class="verdict good" id="bVerdict">Stable</div>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <p>Observez : abaisser G ou élargir la base augmente l'angle limite. L'angle limite θ (en degrés) vérifie <span class="mono">tan θ = (largeur / 2) / hauteur de G</span>, les deux longueurs étant exprimées dans la même unité (ici en cm). Exemple : base de 8 cm, G à 10 cm → tan θ = 4 / 10 = 0,4 → θ ≈ 22°.</p>
+  <div class="box home"><h4>Expérience maison · 7 min : trouver G par suspension</h4>
+    <ol>
+      <li>Découpez une forme irrégulière dans un carton (pas un rectangle !).</li>
+      <li>Percez trois petits trous près du bord. Accrochez la forme par un trou à une punaise ou un crayon, pour qu'elle pende librement.</li>
+      <li>Accrochez au même point un fil lesté d'un trombone (un fil à plomb) et tracez au crayon la verticale qu'il dessine sur le carton.</li>
+      <li>Recommencez avec les deux autres trous. Les droites se croisent en un point : c'est G. Posez la forme sur la pointe d'un crayon à cet endroit : elle tient en équilibre.</li>
+    </ol>
+    <p class="muted" style="margin-bottom:0">Pourquoi ça marche : un objet suspendu s'immobilise quand G est exactement sous le point d'accroche.</p></div>
+  <div class="box design"><h4>Pour le designer</h4><p style="margin:0">Lampe, vase, tabouret, culbuto : la stabilité se dessine. Une base large et un G bas (matière dense en bas, légère en haut) rendent l'objet difficile à renverser.</p></div>
+  <div class="check" data-answer="b" data-ok="Exact : en ajoutant de la matière lourde en bas, G descend, la verticale de G reste plus longtemps dans la base d'appui." data-ko="Pensez à la position de G : où descend-il quand on ajoute une masse en bas ?">
+    <p class="q">Un vase haut et étroit se renverse trop facilement. Quelle modification est la plus efficace sans changer sa silhouette ?</p>
+    <label><input type="radio" name="c2" value="a"> Le peindre avec une peinture plus épaisse</label>
+    <label><input type="radio" name="c2" value="b"> Lester le fond (sable, plomb, céramique plus épaisse en bas)</label>
+    <label><input type="radio" name="c2" value="c"> Épaissir le col du vase</label>
+    <button type="button" class="ghost">Vérifier</button><p class="fb" aria-live="polite"></p>
+  </div>
+  <div class="done-row"><label><input type="checkbox" data-done="gravite"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 3 MOMENT ============ -->
+<section class="part col" id="moment">
+  <div class="part-head"><h2>3 · Le moment d'une force</h2><span class="duree">≈ 15 min</span></div>
+  <p>Une force peut faire <b>tourner</b> un objet autour d'un axe. Son effet de rotation dépend de sa valeur, mais aussi de la distance entre l'axe et la droite d'action de la force : le <b>bras de levier d</b>. Cet effet s'appelle le <b>moment</b>.</p>
+  <div class="formula"><div class="fexpr">M = F × d</div><ul class="units"><li><b>M</b><span>moment de la force (son effet de rotation)</span><em>newton-mètre (N·m)</em></li><li><b>F</b><span>valeur de la force</span><em>newton (N)</em></li><li><b>d</b><span>bras de levier : distance entre l'axe et la droite d'action de la force, mesurée perpendiculairement à la force</span><em>mètre (m)</em></li></ul><p class="fnote">Exemple : une force de 20 N appliquée à 0,5 m de l'axe → M = 20 × 0,5 = 10 N·m.</p></div>
+  <p>Ouvrez une porte en poussant tout près des gonds : c'est très dur. Poussez près de la poignée : c'est facile. Même force, bras de levier plus grand, moment plus grand.</p>
+  <p>Un objet qui peut tourner est en équilibre quand les moments qui le font tourner dans un sens compensent ceux qui le font tourner dans l'autre sens.</p>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvBal" aria-label="Balançoire avec deux masses"></canvas>
+      <div class="legend"><i class="v-force">→ poids</i><i class="v-c">▲ axe</i></div></div>
+    <div class="ctrl">
+      <h4>La balançoire</h4>
+      <p class="muted" style="margin:0;font-size:14px">Moments calculés avec g = 9,81 N/kg : M = m × g × d.</p>
+      <div class="field"><label for="m1">Masse à gauche <output id="m1O">20 kg</output></label><input id="m1" type="range" min="5" max="60" step="5" value="20"></div>
+      <div class="field"><label for="d1">Distance à l'axe, gauche <output id="d1O">1,00 m</output></label><input id="d1" type="range" min="0.25" max="2" step="0.25" value="1"></div>
+      <div class="field"><label for="m2">Masse à droite <output id="m2O">40 kg</output></label><input id="m2" type="range" min="5" max="60" step="5" value="40"></div>
+      <div class="field"><label for="d2">Distance à l'axe, droite <output id="d2O">1,00 m</output></label><input id="d2" type="range" min="0.25" max="2" step="0.25" value="1"></div>
+      <div class="readout"><div><span>Moment gauche</span><b id="balR1">—</b></div><div><span>Moment droit</span><b id="balR2">—</b></div></div>
+      <div class="verdict mid" id="balVerdict">—</div>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <p>Défi : avec 20 kg à gauche et 40 kg à droite, trouvez deux réglages différents qui équilibrent la balançoire. Écrivez le calcul des deux moments.</p>
+  <div class="box link"><h4>Animation à explorer · 5 min</h4>
+    <p><a href="https://phet.colorado.edu/fr/simulations/balancing-act" target="_blank" rel="noopener">PhET · Équilibrer les masses (Balancing Act)</a>. Ouvrez l'onglet « Laboratoire » : placez deux objets puis retirez les cales. Ensuite, essayez l'onglet « Jeu » au niveau 1 ou 2.</p></div>
+  <div class="check" data-answer="a" data-ok="Bien vu : le moment du poids autour du point de contact (P × bras de levier) fait tourner l'objet. S'il ramène l'objet vers sa position de départ, c'est un équilibre stable." data-ko="Rappel : une rotation est causée par un moment, et un moment dépend du bras de levier.">
+    <p class="q">Un objet incliné revient seul à sa position de départ. Qu'est-ce qui le fait tourner ?</p>
+    <label><input type="radio" name="c3" value="a"> Le moment de son poids autour du point de contact avec le sol</label>
+    <label><input type="radio" name="c3" value="b"> Sa masse, qui veut rester en bas</label>
+    <label><input type="radio" name="c3" value="c"> La réaction du sol, qui pousse vers le haut au niveau de G</label>
+    <button type="button" class="ghost">Vérifier</button><p class="fb" aria-live="polite"></p>
+  </div>
+  <div class="done-row"><label><input type="checkbox" data-done="moment"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 4 CULBUTO ============ -->
+<section class="part col" id="culbuto">
+  <div class="part-head"><h2>4 · Le culbuto</h2><span class="duree">≈ 20 min</span></div>
+  <p>Le culbuto a une base en forme de demi-sphère. Quand on le penche, il <b>roule</b> sur cette base : le point de contact avec le sol se déplace, mais il reste toujours exactement sous le <b>centre C</b> de la demi-sphère.</p>
+  <p>Le poids, appliqué en G, crée alors un moment autour du point de contact. Tout dépend de la position de G par rapport à C :</p>
+  <ul>
+    <li><b>G sous C</b> : la verticale de G passe du côté opposé à l'inclinaison, le moment du poids ramène l'objet. Il se relève : équilibre <b>stable</b>.</li>
+    <li><b>G au-dessus de C</b> : le moment du poids aggrave l'inclinaison. Il tombe : équilibre <b>instable</b>.</li>
+    <li><b>G confondu avec C</b> : aucun moment. Il reste dans la position où on le laisse : équilibre <b>indifférent</b> (comme une bille).</li>
+  </ul>
+  <div class="formula"><div class="fexpr">M = P × d × sin θ</div><ul class="units"><li><b>M</b><span>moment du poids autour du point de contact avec le sol</span><em>newton-mètre (N·m)</em></li><li><b>P</b><span>poids du culbuto (P = m × g)</span><em>newton (N)</em></li><li><b>d</b><span>distance entre le centre <span class="v-c">C</span> de la demi-sphère et le centre de gravité <span class="v-g">G</span></span><em>mètre (m)</em></li><li><b>θ</b><span>angle d'inclinaison par rapport à la verticale</span><em>degré (°)</em></li><li><b>d × sin θ</b><span>bras de levier : écart horizontal entre G et le point de contact</span><em>mètre (m)</em></li></ul><p class="fnote">Le culbuto se relève si G est sous C. Exemple : P = 1,5 N, d = 0,01 m, θ = 30° (sin 30° = 0,5) → M = 1,5 × 0,01 × 0,5 = 0,0075 N·m, soit 7,5 mN·m (1 mN·m = 0,001 N·m).</p></div>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvCul" aria-label="Culbuto incliné avec son centre de gravité et le centre de sa base"></canvas>
+      <div class="legend"><i class="v-g">● G</i><i class="v-c">✕ C</i><i class="v-force">→ P</i><i>● lest</i></div></div>
+    <div class="ctrl">
+      <h4>Régler le culbuto</h4>
+      <div class="field"><label for="cTop">Masse du corps (partie haute) <output id="cTopO">40 g</output></label><input id="cTop" type="range" min="10" max="150" step="5" value="40"></div>
+      <div class="field"><label for="cLest">Masse du lest <output id="cLestO">0 g</output></label><input id="cLest" type="range" min="0" max="200" step="5" value="0"></div>
+      <div class="field"><label for="cPos">Position du lest <output id="cPosO">au fond</output></label><input id="cPos" type="range" min="-100" max="90" step="5" value="80"></div>
+      <div class="field"><label for="cAng">Inclinaison de départ <output id="cAngO">30°</output></label><input id="cAng" type="range" min="-60" max="60" step="1" value="30"></div>
+      <div class="btns"><button type="button" id="cGo">Lâcher</button><button type="button" class="ghost" id="cReset">Remettre droit</button></div>
+      <div class="readout"><div><span>Distance C → G</span><b id="cR1">—</b></div><div><span>Moment du poids</span><b id="cR2">—</b></div></div>
+      <div class="verdict" id="cVerdict">—</div>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <p class="muted" style="font-size:15px">Modèle : base pleine de 4 cm de rayon et 60 g (son propre G est à 1,5 cm sous C), corps creux dont le G est 3,6 cm au-dessus de C. Le lest peut être placé du sommet de la tête jusqu'au fond de la base.</p>
+  <p>Défi : le corps pèse 120 g. Quel lest minimum, placé au fond, permet au culbuto de se relever ? Et si vous le placez au niveau de C ?</p>
+  <div class="box design"><h4>Pour le designer</h4><ul>
+    <li>Plus la base est grande (rayon de C plus haut), plus il est facile d'avoir G sous C.</li>
+    <li>Le corps doit être <b>léger</b> (carton, papier mâché, bois tourné creux, impression 3D peu remplie) et le lest <b>dense et bas</b> (plomb de pêche, rondelles d'acier, plâtre).</li>
+    <li>Une base qui n'est pas une portion de sphère (cône, ellipse aplatie) change la position du point de contact : le comportement change aussi. C'est une piste de recherche formelle !</li>
+  </ul></div>
+  <div class="check" data-answer="c" data-ok="C'est ça. Seule la position de G par rapport à C compte : on peut avoir un objet lourd qui tombe et un objet léger qui se relève." data-ko="Ce n'est pas la masse totale qui décide. Regardez où est G par rapport à C dans la simulation.">
+    <p class="q">Un culbuto refuse de se relever. Votre diagnostic ?</p>
+    <label><input type="radio" name="c4" value="a"> Il est trop léger</label>
+    <label><input type="radio" name="c4" value="b"> Sa base est trop lisse</label>
+    <label><input type="radio" name="c4" value="c"> Son centre de gravité est au-dessus du centre de la demi-sphère</label>
+    <button type="button" class="ghost">Vérifier</button><p class="fb" aria-live="polite"></p>
+  </div>
+  <div class="done-row"><label><input type="checkbox" data-done="culbuto"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 5 TOUPIE ============ -->
+<section class="part col" id="toupie">
+  <div class="part-head"><h2>5 · La toupie et le moment cinétique</h2><span class="duree">≈ 25 min</span></div>
+  <p>Posée immobile sur sa pointe, une toupie tombe immédiatement : G est au-dessus du point d'appui, la base d'appui est un point. C'est la règle de la partie 2. Pourtant, lancée, elle tient debout. Il faut une notion de plus.</p>
+  <h3>Le moment d'inertie : résister à la mise en rotation</h3>
+  <p>Pour un objet qui avance, la <b>masse</b> mesure la difficulté à le mettre en mouvement. Pour un objet qui tourne, cette difficulté dépend aussi de <b>l'éloignement de la matière</b> par rapport à l'axe : c'est le <b>moment d'inertie I</b>.</p>
+  <div class="formula"><div class="fexpr">I = Σ m·r²</div><ul class="units"><li><b>I</b><span>moment d'inertie par rapport à l'axe de rotation</span><em>kilogramme-mètre carré (kg·m²)</em></li><li><b>m</b><span>masse d'un petit morceau de l'objet</span><em>kilogramme (kg)</em></li><li><b>r</b><span>distance de ce morceau à l'axe</span><em>mètre (m)</em></li><li><b>Σ</b><span>« somme de » : on additionne tous les morceaux</span><em>—</em></li></ul><p class="fnote">Formules toutes faites, avec M la masse totale et R le rayon : disque plein I = ½ × M × R² ; anneau (masse sur le bord) I = M × R². Exemple : disque de 0,050 kg et 0,03 m de rayon → I = ½ × 0,050 × 0,03² = 2,25 × 10⁻⁵ kg·m².</p></div>
+  <p>À masse égale, un anneau a un moment d'inertie deux fois plus grand qu'un disque plein. Placer la matière loin de l'axe est donc très efficace.</p>
+  <h3>Le moment cinétique : la « quantité de rotation »</h3>
+  <div class="formula"><div class="fexpr">L = I × ω</div><ul class="units"><li><b>L</b><span>moment cinétique</span><em>kilogramme-mètre carré par seconde (kg·m²/s)</em></li><li><b>I</b><span>moment d'inertie</span><em>kilogramme-mètre carré (kg·m²)</em></li><li><b>ω</b><span>oméga : vitesse de rotation propre de la toupie</span><em>radian par seconde (rad/s)</em></li></ul><p class="fnote">Le radian mesure les angles : 1 tour = 2π rad ≈ 6,28 rad. Pour convertir : vitesse en tr/min × 2π / 60, soit environ × 0,105. Exemple : 1 500 tr/min ≈ 157 rad/s → L = 2,25 × 10⁻⁵ × 157 ≈ 3,5 × 10⁻³ kg·m²/s.</p></div>
+  <p>Le moment cinétique est représenté par une flèche portée par l'axe de rotation. Il se conserve tant qu'aucun moment extérieur n'agit : c'est pour cela que la patineuse qui ramène ses bras (I diminue) tourne plus vite (ω augmente).</p>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><marker id="mkL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--steel)"/></marker><marker id="mkR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--ink)"/></marker></defs></svg>
+  <h3>Trois exemples chiffrés</h3>
+  <p>Les valeurs sont des ordres de grandeur réalistes. Refaites les calculs avec votre calculatrice : c'est le meilleur moyen de retenir les unités. Sur chaque schéma, la flèche bleue est L, la flèche noire courbe indique le sens de rotation, et la masse est en ocre.</p>
+  <div class="ex">
+    <h4>1 · La toupie : où mettre la matière ?</h4>
+    <p class="muted">Même masse (50 g = 0,050 kg), même rayon (3 cm = 0,03 m), même vitesse (1 500 tr/min ≈ 157 rad/s).</p>
+    <div class="ex-pair">
+      <figure class="ex-item"><svg class="sch" viewBox="0 0 120 104" role="img" aria-label="Disque plein en rotation, masse répartie partout"><line x1="60" y1="98" x2="60" y2="22" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><ellipse cx="60" cy="66" rx="42" ry="13" fill="var(--muted)" stroke="var(--ink)" stroke-width="1.2"/><ellipse cx="60" cy="61" rx="42" ry="13" fill="var(--brass)" stroke="var(--ink)" stroke-width="1.2"/><line x1="60" y1="61" x2="102" y2="61" stroke="var(--ink)" stroke-width="1.2"/><text x="78" y="57" class="st">R</text><path d="M24 82 A44 15 0 0 0 96 82" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#mkR)"/><line x1="60" y1="40" x2="60" y2="8" stroke="var(--steel)" stroke-width="3" marker-end="url(#mkL)"/><text x="66" y="14" class="sl">L</text></svg><figcaption><b>Disque plein</b><dl><div><dt>I</dt><dd>½ × 0,050 × 0,03² = 2,25 × 10⁻⁵ kg·m²</dd></div><div><dt>ω</dt><dd>≈ 157 rad/s</dd></div></dl><p class="ex-res">L ≈ 3,5 × 10⁻³ kg·m²/s</p></figcaption></figure>
+      <figure class="ex-item"><svg class="sch" viewBox="0 0 120 104" role="img" aria-label="Anneau en rotation, masse sur le bord"><line x1="60" y1="98" x2="60" y2="22" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><ellipse cx="60" cy="66" rx="42" ry="13" fill="none" stroke="var(--muted)" stroke-width="7"/><ellipse cx="60" cy="61" rx="42" ry="13" fill="none" stroke="var(--brass)" stroke-width="7"/><line x1="22" y1="61" x2="98" y2="61" stroke="var(--ink)" stroke-width="1"/><line x1="60" y1="49" x2="60" y2="73" stroke="var(--ink)" stroke-width="1"/><ellipse cx="60" cy="61" rx="5" ry="2" fill="var(--ink)"/><text x="64" y="58" class="st">R</text><path d="M24 84 A44 15 0 0 0 96 84" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#mkR)"/><line x1="60" y1="40" x2="60" y2="8" stroke="var(--steel)" stroke-width="3" marker-end="url(#mkL)"/><text x="66" y="14" class="sl">L</text></svg><figcaption><b>Anneau : masse sur le bord</b><dl><div><dt>I</dt><dd>0,050 × 0,03² = 4,5 × 10⁻⁵ kg·m²</dd></div><div><dt>ω</dt><dd>≈ 157 rad/s</dd></div></dl><p class="ex-res">L ≈ 7,1 × 10⁻³ kg·m²/s</p><span class="ex-note">deux fois plus, sans ajouter un gramme</span></figcaption></figure>
+    </div>
+    <p class="ex-take">Mettre la matière loin de l'axe double L : c'est un choix de forme, pas de poids.</p>
+  </div>
+  <div class="ex">
+    <h4>2 · La roue de vélo : peu de masse, mais loin de l'axe</h4>
+    <p class="muted">Environ 1 kg dans la jante et le pneu, rayon 33 cm = 0,33 m, vélo à 20 km/h (5,56 m/s).</p>
+    <div class="ex-pair">
+      <figure class="ex-item"><svg class="sch" viewBox="0 0 120 104" role="img" aria-label="Roue de vélo vue de biais, masse dans la jante, axe horizontal"><line x1="48" y1="52" x2="64.0" y2="52.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="61.9" y2="74.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="56.0" y2="90.1" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="48.0" y2="96.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="40.0" y2="90.1" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="34.1" y2="74.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="32.0" y2="52.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="34.1" y2="30.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="40.0" y2="13.9" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="48.0" y2="8.0" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="56.0" y2="13.9" stroke="var(--muted)" stroke-width="0.8"/><line x1="48" y1="52" x2="61.9" y2="30.0" stroke="var(--muted)" stroke-width="0.8"/><ellipse cx="48" cy="52" rx="16" ry="44" fill="none" stroke="var(--ink)" stroke-width="5"/><ellipse cx="48" cy="52" rx="13" ry="40" fill="none" stroke="var(--brass)" stroke-width="2"/><line x1="30" y1="52" x2="72" y2="52" stroke="var(--ink)" stroke-width="2.5"/><circle cx="48" cy="52" r="3" fill="var(--ink)"/><line x1="72" y1="52" x2="114" y2="52" stroke="var(--steel)" stroke-width="3" marker-end="url(#mkL)"/><text x="98" y="46" class="sl">L</text><path d="M66 18 A22 40 0 0 1 70 80" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#mkR)"/></svg><figcaption><b>Roue qui tourne, axe horizontal</b><dl><div><dt>I</dt><dd>1 × 0,33² ≈ 0,11 kg·m²</dd></div><div><dt>ω</dt><dd>v / R = 5,56 / 0,33 ≈ 16,8 rad/s (≈ 160 tr/min)</dd></div></dl><p class="ex-res">L ≈ 1,8 kg·m²/s</p><span class="ex-note">environ 500 fois la toupie</span></figcaption></figure>
+    </div>
+    <p class="ex-take">Tenue par son axe pendant qu'elle tourne, la roue résiste nettement quand on essaie de la pencher. Une bonne expérience à faire avec une roue démontée.</p>
+  </div>
+  <div class="ex">
+    <h4>3 · La patineuse : L ne change pas</h4>
+    <p class="muted">La glace frotte très peu : rien ne freine la rotation, son moment cinétique se conserve.</p>
+    <div class="ex-pair">
+      <figure class="ex-item"><svg class="sch" viewBox="0 0 120 104" role="img" aria-label="Patineuse bras écartés, mains loin de l'axe, rotation lente"><line x1="60" y1="104" x2="60" y2="2" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="60" cy="24" r="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6"/><line x1="60" y1="30" x2="60" y2="66" stroke="var(--ink)" stroke-width="2.4"/><line x1="60" y1="66" x2="60" y2="98" stroke="var(--ink)" stroke-width="2.4"/><polyline points="60,66 70,80 62,88" fill="none" stroke="var(--ink)" stroke-width="2.4"/><line x1="18" y1="38" x2="102" y2="38" stroke="var(--ink)" stroke-width="2.4"/><circle cx="18" cy="38" r="4" fill="var(--brass)"/><circle cx="102" cy="38" r="4" fill="var(--brass)"/><path d="M20 56 A40 7 0 0 0 100 56" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#mkR)"/><line x1="60" y1="16" x2="60" y2="2" stroke="var(--steel)" stroke-width="3" marker-end="url(#mkL)"/><text x="66" y="10" class="sl">L</text></svg><figcaption><b>Bras écartés</b><dl><div><dt>I</dt><dd>≈ 3 kg·m² (mains loin de l'axe)</dd></div><div><dt>ω</dt><dd>2 tr/s = 2 × 2π ≈ 12,6 rad/s</dd></div></dl><p class="ex-res">L ≈ 38 kg·m²/s</p></figcaption></figure>
+      <figure class="ex-item"><svg class="sch" viewBox="0 0 120 104" role="img" aria-label="Patineuse bras serrés, mains près de l'axe, rotation trois fois plus rapide"><line x1="60" y1="104" x2="60" y2="2" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="60" cy="24" r="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6"/><line x1="60" y1="30" x2="60" y2="66" stroke="var(--ink)" stroke-width="2.4"/><line x1="60" y1="66" x2="60" y2="98" stroke="var(--ink)" stroke-width="2.4"/><polyline points="60,66 70,80 62,88" fill="none" stroke="var(--ink)" stroke-width="2.4"/><polyline points="60,36 50,44 58,50" fill="none" stroke="var(--ink)" stroke-width="2.4"/><polyline points="60,36 70,44 62,50" fill="none" stroke="var(--ink)" stroke-width="2.4"/><circle cx="58" cy="50" r="3.5" fill="var(--brass)"/><circle cx="62" cy="50" r="3.5" fill="var(--brass)"/><path d="M40 56 A20 7 0 0 0 80 56" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#mkR)"/><path d="M40 64 A20 6 0 0 0 80 64" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#mkR)"/><text x="84" y="70" class="st">×3</text><line x1="60" y1="16" x2="60" y2="2" stroke="var(--steel)" stroke-width="3" marker-end="url(#mkL)"/><text x="66" y="10" class="sl">L</text></svg><figcaption><b>Bras serrés</b><dl><div><dt>I</dt><dd>≈ 1 kg·m², trois fois moins</dd></div><div><dt>ω</dt><dd>38 / 1 = 38 rad/s ≈ 6 tr/s</dd></div></dl><p class="ex-res">L ≈ 38 kg·m²/s</p><span class="ex-note">inchangé : elle tourne 3 fois plus vite</span></figcaption></figure>
+    </div>
+    <p class="ex-take">I divisé par 3, donc ω multiplié par 3 : le produit L = I × ω reste le même.</p>
+  </div>
+
+  <h3>Pourquoi la toupie ne tombe pas : la précession</h3>
+  <p>Si la toupie est un peu penchée, son poids crée un moment autour de la pointe, exactement comme pour un objet qui bascule. Mais ce moment est <b>horizontal et perpendiculaire</b> à la flèche L. Il ne la rabat pas vers le sol : il la fait <b>pivoter</b> autour de la verticale. L'axe de la toupie décrit lentement un cône : c'est la <b>précession</b>.</p>
+  <p>Regardez l'animation dans l'ordre des trois boutons.</p>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvPrec" aria-label="Animation : toupie qui tombe sans rotation, puis toupie en précession avec ses vecteurs"></canvas>
+      <div class="legend"><i class="v-c">→ L</i><i class="v-force">→ P</i><i style="color:var(--ok)">→ moment du poids / ΔL</i></div></div>
+    <div class="ctrl">
+      <h4>Pourquoi elle ne tombe pas</h4>
+      <div class="btns" role="group" aria-label="Choix de l'animation">
+        <button type="button" class="ghost" data-pm="0">1 · Sans rotation</button>
+        <button type="button" class="ghost" data-pm="1">2 · En rotation</button>
+        <button type="button" class="ghost" data-pm="2">3 · Au ralenti</button>
+      </div>
+      <p id="precTitle" style="margin:0;font-family:var(--f-display);font-weight:700;font-size:17px"></p>
+      <p id="precTxt" style="margin:0;font-size:15px"></p>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <div class="box"><h4>Une image pour s'en souvenir</h4>
+    <p style="margin:0">Faites tourner une balle au bout d'une ficelle. La ficelle tire sans cesse la balle vers votre main, et pourtant la balle ne s'en rapproche pas : elle tourne en rond, parce que la traction est toujours perpendiculaire à sa vitesse. Pour la toupie, c'est pareil, avec le moment du poids à la place de la ficelle et le moment cinétique à la place de la vitesse : L tourne en rond au lieu de tomber.</p></div>
+  <div class="formula"><div class="fexpr">Ω = m × g × h / (I × ω)</div><ul class="units"><li><b>Ω</b><span>grand oméga : vitesse de précession, c'est-à-dire la vitesse à laquelle l'axe tourne autour de la verticale</span><em>radian par seconde (rad/s)</em></li><li><b>m</b><span>masse de la toupie</span><em>kilogramme (kg)</em></li><li><b>g</b><span>intensité de la pesanteur (9,81 sur Terre)</span><em>newton par kilogramme (N/kg)</em></li><li><b>h</b><span>hauteur du centre de gravité G au-dessus de la pointe</span><em>mètre (m)</em></li><li><b>I</b><span>moment d'inertie autour de l'axe de la toupie</span><em>kilogramme-mètre carré (kg·m²)</em></li><li><b>ω</b><span>petit oméga : vitesse de rotation propre</span><em>radian par seconde (rad/s)</em></li></ul><p class="fnote">Le numérateur m × g × h est le moment du poids quand l'axe est vertical (en N·m) ; le dénominateur I × ω est le moment cinétique L. Plus L est grand, plus la précession est lente et la toupie stable. Exemple avec la toupie par défaut du simulateur : Ω = 0,050 × 9,81 × 0,02 / (2,25 × 10⁻⁵ × 157) ≈ 2,8 rad/s. Un tour complet de l'axe (2π rad) dure donc 2π / 2,8 ≈ 2,3 s.</p></div>
+  <p>Les frottements sur la pointe font baisser ω petit à petit. La précession accélère, l'axe se met à tanguer, et en dessous d'une vitesse critique la toupie finit par tomber.</p>
+</section>
+<div class="wide">
+  <div class="bench">
+    <div class="fig"><canvas id="cvTop" aria-label="Toupie en rotation avec précession de son axe"></canvas>
+      <div class="legend"><i class="v-c">→ L</i><i class="v-force">→ P</i><i style="color:var(--ok)">→ moment du poids</i></div></div>
+    <div class="ctrl">
+      <h4>Concevoir et lancer</h4>
+      <div class="field"><label for="tForme">Répartition de la masse</label>
+        <select id="tForme"><option value="disque">Disque plein</option><option value="anneau">Anneau (masse en périphérie)</option></select></div>
+      <div class="field"><label for="tR">Rayon <output id="tRO">3,0 cm</output></label><input id="tR" type="range" min="1.5" max="5" step="0.5" value="3"></div>
+      <div class="field"><label for="tM">Masse <output id="tMO">50 g</output></label><input id="tM" type="range" min="15" max="150" step="5" value="50"></div>
+      <div class="field"><label for="tH">Hauteur de G au-dessus de la pointe <output id="tHO">2,0 cm</output></label><input id="tH" type="range" min="0.5" max="5" step="0.5" value="2"></div>
+      <div class="field"><label for="tPointe">Pointe</label>
+        <select id="tPointe"><option value="0.0002">Fine (métal)</option><option value="0.0006" selected>Arrondie (bois)</option><option value="0.002">Large (plastique émoussé)</option></select></div>
+      <div class="field"><label for="tW">Vitesse au lancer <output id="tWO">1500 tr/min</output></label><input id="tW" type="range" min="300" max="3000" step="100" value="1500"></div>
+      <div class="btns"><button type="button" id="tGo">Lancer</button><button type="button" class="ghost" id="tFast">Accéléré ×4</button><label style="display:flex;gap:6px;align-items:center;font-size:14px"><input type="checkbox" id="tVec" checked> vecteurs</label></div>
+      <div class="readout">
+        <div><span>Moment d'inertie I</span><b id="tR1">—</b></div>
+        <div><span>Moment cinétique L</span><b id="tR2">—</b></div>
+        <div><span>Vitesse actuelle</span><b id="tR3">—</b></div>
+        <div><span>Durée d'un tour de précession</span><b id="tR4">—</b></div>
+        <div><span>Vitesse critique</span><b id="tR5">—</b></div>
+        <div><span>Durée estimée</span><b id="tR6">—</b></div>
+      </div>
+      <div class="verdict mid" id="tVerdict">Réglez puis lancez.</div>
+    </div>
+  </div>
+</div>
+<section class="col">
+  <p class="muted" style="font-size:15px">À l'écran, la rotation propre est ralentie pour rester visible ; la précession et le chrono sont en temps réel (ou ×4). Coefficient de frottement de la pointe sur le sol pris égal à 0,3 (un coefficient de frottement n'a pas d'unité).</p>
+  <h3>À faire</h3>
+  <ol>
+    <li>Lancez la toupie par défaut. Notez sa durée de rotation.</li>
+    <li>Sans changer la masse, passez en « Anneau ». Que deviennent I, L et la durée ? Expliquez.</li>
+    <li>Montez G (hauteur 4 cm). Que devient la précession ? Pourquoi les toupies sont-elles plates et basses ?</li>
+    <li>Testez les trois pointes. Quel matériau et quelle forme choisiriez-vous pour la pointe ?</li>
+  </ol>
+  <div class="box link"><h4>Animation à explorer · 3 min</h4>
+    <p><a href="https://www.physics.unlv.edu/~jeffery/astro/mechanics/precession_gyroscope.html" target="_blank" rel="noopener">Animation de la précession d'un gyroscope</a> (page en anglais, l'animation suffit). Repérez la flèche du moment cinétique et le cône décrit par l'axe.</p></div>
+  <div class="box design"><h4>Pour le designer</h4><ul>
+    <li>Masse en <b>périphérie</b> (jante, anneau de laiton, rondelles collées au bord) : grand I, longue rotation, précession lente.</li>
+    <li>G <b>bas</b> et proche de la pointe : moment du poids faible.</li>
+    <li>Pointe <b>dure et fine</b>, bien centrée : moins de frottement. Une pointe arrondie pardonne mieux les sols irréguliers.</li>
+    <li><b>Symétrie</b> parfaite autour de l'axe : un balourd (masse mal répartie) fait vibrer la toupie et l'arrête vite.</li>
+  </ul></div>
+  <div class="check" data-answer="b" data-ok="Oui : à masse égale, l'anneau a un moment d'inertie plus grand, donc un moment cinétique plus grand pour la même vitesse ; les frottements l'arrêtent plus lentement et la précession est plus lente." data-ko="Revenez à I = Σ m·r² : que se passe-t-il quand la matière s'éloigne de l'axe ?">
+    <p class="q">Deux toupies de même masse et même rayon, lancées à la même vitesse : l'une est un disque plein, l'autre a sa masse concentrée sur le bord. Laquelle tourne le plus longtemps ?</p>
+    <label><input type="radio" name="c5" value="a"> Le disque plein, car sa masse est mieux répartie</label>
+    <label><input type="radio" name="c5" value="b"> Celle à masse sur le bord, car son moment d'inertie est plus grand</label>
+    <label><input type="radio" name="c5" value="c"> Elles tournent aussi longtemps, puisqu'elles ont la même masse</label>
+    <button type="button" class="ghost">Vérifier</button><p class="fb" aria-live="polite"></p>
+  </div>
+  <div class="done-row"><label><input type="checkbox" data-done="toupie"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 6 RECHERCHE ============ -->
+<section class="part col" id="recherche">
+  <div class="part-head"><h2>6 · Mission documentaire</h2><span class="duree">≈ 10 min</span></div>
+  <p>Trouvez les réponses aux quatre questions ci-dessous. Pour chacune, notez dans votre carnet la réponse <b>et</b> la source (nom du site, titre de la page). Certaines questions du QCM porteront dessus.</p>
+  <ol>
+    <li>Quel savant a utilisé un gyroscope en 1852, et pour étudier quoi ?</li>
+    <li>Citez deux objets ou engins actuels qui contiennent un gyroscope.</li>
+    <li>Que signifie le nom japonais du culbuto traditionnel, <i>okiagari-koboshi</i>, et de quoi est-il le symbole ?</li>
+    <li>Selon la fiche Vikidia sur la toupie, pourquoi la masse d'une toupie est-elle disposée en anneau, et pourquoi ne touche-t-elle le sol qu'en un point ?</li>
+  </ol>
+  <div class="box link"><h4>Ressources de départ</h4><ul>
+    <li><a href="https://fr.vikidia.org/wiki/Gyroscope" target="_blank" rel="noopener">Vikidia · Gyroscope</a></li>
+    <li><a href="https://fr.vikidia.org/wiki/Toupie_(jouet)" target="_blank" rel="noopener">Vikidia · Toupie (jouet)</a></li>
+    <li><a href="https://fr.vikidia.org/wiki/Centre_de_gravit%C3%A9" target="_blank" rel="noopener">Vikidia · Centre de gravité</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Okiagari-koboshi" target="_blank" rel="noopener">Wikipedia · Okiagari-koboshi</a> (en anglais : utilisez la traduction du navigateur)</li>
+    <li><a href="https://www.techno-science.net/fr/definitions/precession" target="_blank" rel="noopener">Techno-Science · Précession</a></li>
+    <li><a href="https://www.planete-sciences.org/vendee/wp-content/uploads/2020/04/fiche-toupie.pdf" target="_blank" rel="noopener">Planète Sciences · Fiche « fabriquer une toupie »</a> (PDF)</li>
+  </ul></div>
+  <div class="box"><h4>Évaluer une source en 30 secondes</h4>
+    <p style="margin:0">Qui écrit (auteur, institution) ? Quand (date) ? Pourquoi (informer, vendre) ? L'information se retrouve-t-elle sur une deuxième source indépendante ? Une encyclopédie collaborative est un bon point de départ, pas une preuve définitive.</p></div>
+  <div class="done-row"><label><input type="checkbox" data-done="recherche"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 7 CARNET ============ -->
+<section class="part col" id="carnet">
+  <div class="part-head"><h2>7 · Carnet de conception</h2><span class="duree">≈ 10 min</span></div>
+  <p>Préparez les deux objets que vous fabriquerez à l'atelier. Chaque choix doit être justifié par une notion de physique, en une phrase. Utilisez le vocabulaire : <i>centre de gravité, base d'appui, moment, bras de levier, moment d'inertie, moment cinétique, précession, frottement</i>.</p>
+  <p class="muted">Exemple : « Je place trois rondelles d'acier sur le bord du disque pour augmenter le moment d'inertie : la toupie gardera son moment cinétique plus longtemps. »</p>
+  <div class="carnet">
+    <div class="field full"><label for="kNom">Nom, prénom</label><input id="kNom" type="text" autocomplete="name"></div>
+    <div class="field"><label for="kT1">Toupie · forme et répartition de la masse</label><textarea id="kT1"></textarea></div>
+    <div class="field"><label for="kT2">Toupie · pointe, hauteur de G, matériaux</label><textarea id="kT2"></textarea></div>
+    <div class="field"><label for="kC1">Culbuto · forme de la base</label><textarea id="kC1"></textarea></div>
+    <div class="field"><label for="kC2">Culbuto · lest et position de G</label><textarea id="kC2"></textarea></div>
+    <div class="field full"><label for="kRec">Mission documentaire · vos 4 réponses et leurs sources</label><textarea id="kRec" style="min-height:110px"></textarea></div>
+    <div class="field full"><label for="kArg">Si on vous demande « pourquoi ta toupie ne tombe pas ? », que répondez-vous ? (3 phrases)</label><textarea id="kArg"></textarea></div>
+  </div>
+  <div class="btns" style="margin-top:14px"><button type="button" id="kCopy">Copier mon carnet</button><span class="muted" id="kMsg" aria-live="polite" style="font-size:14px;align-self:center">Enregistré automatiquement dans ce navigateur.</span></div>
+  <textarea id="kOut" readonly hidden style="margin-top:10px;min-height:200px" aria-label="Texte du carnet à copier"></textarea>
+  <p class="muted">Collez ensuite le texte dans le devoir Pronote prévu par votre enseignant (ou dans un message).</p>
+  <div class="done-row"><label><input type="checkbox" data-done="carnet"> Étape terminée</label></div>
+</section>
+
+<!-- ============ 8 QCM ============ -->
+<section class="part col" id="qcm">
+  <div class="part-head"><h2>8 · QCM sur Pronote</h2><span class="duree">≈ 15 min</span></div>
+  <p>Rendez-vous sur Pronote, rubrique « Travail à faire », pour le QCM « Toupie &amp; Culbuto ». 21 questions : 7 d'analyse, 7 de synthèse, 7 de recherche documentaire. Vous pouvez garder cette page et votre carnet ouverts pendant le QCM.</p>
+  <div class="box"><h4>Mémo des formules</h4>
+    <div class="tablewrap" style="border:0">
+    <table class="plan">
+      <tbody>
+        <tr><th>Notion</th><th>Relation</th><th>Grandeurs et unités</th></tr>
+        <tr><td>Poids</td><td class="mono">P = m × g</td><td>P en N · m en kg · g en N/kg</td></tr>
+        <tr><td>Centre de gravité</td><td>point d'équilibre, plus près de la masse la plus lourde</td><td>2 × plus lourd → 2 × plus près</td></tr>
+        <tr><td>Moment d'une force</td><td class="mono">M = F × d</td><td>M en N·m · F en N · d en m</td></tr>
+        <tr><td>Moment du poids (culbuto)</td><td class="mono">M = P × d × sin θ</td><td>M en N·m · P en N · d en m · θ en °</td></tr>
+        <tr><td>Moment d'inertie</td><td class="mono">I = Σ m·r²</td><td>I en kg·m² · m en kg · r en m</td></tr>
+        <tr><td>Moment cinétique</td><td class="mono">L = I × ω</td><td>L en kg·m²/s · I en kg·m² · ω en rad/s</td></tr>
+        <tr><td>Précession</td><td class="mono">Ω = m × g × h / (I × ω)</td><td>Ω et ω en rad/s · m en kg · g en N/kg · h en m · I en kg·m²</td></tr>
+        <tr><td>Conversions</td><td class="mono">1 tour = 2π rad</td><td>1 tr/min ≈ 0,105 rad/s · 1 g = 0,001 kg · 1 cm = 0,01 m</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <div class="done-row"><label><input type="checkbox" data-done="qcm"> Étape terminée</label></div>
+</section>
+
+<footer class="col">ESAAT · DN MADe Objet · Physique-chimie · Séance à distance. Simulations intégrées : modèles simplifiés à but pédagogique (frottements et formes idéalisés).</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fr=(x,d=2)=>x.toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const store={get(k,f){try{const v=localStorage.getItem("tc_"+k);return v===null?f:JSON.parse(v)}catch(e){return f}},set(k,v){try{localStorage.setItem("tc_"+k,JSON.stringify(v))}catch(e){}}};
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* --- canvas helper --- */
+function setup(cv){const dpr=window.devicePixelRatio||1;const r=cv.getBoundingClientRect();
+  const w=Math.max(200,r.width),h=Math.max(150,r.height);
+  if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr)}
+  const c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);return {c,w,h}}
+function arrow(c,x1,y1,x2,y2,col,lw=2.5){const a=Math.atan2(y2-y1,x2-x1),L=Math.hypot(x2-x1,y2-y1);if(L<2)return;
+  c.strokeStyle=col;c.fillStyle=col;c.lineWidth=lw;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2-Math.cos(a)*7,y2-Math.sin(a)*7);c.stroke();
+  c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-Math.cos(a-.4)*11,y2-Math.sin(a-.4)*11);c.lineTo(x2-Math.cos(a+.4)*11,y2-Math.sin(a+.4)*11);c.closePath();c.fill()}
+function dot(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+function cross(c,x,y,col){c.strokeStyle=col;c.lineWidth=2.2;c.beginPath();c.moveTo(x-6,y-6);c.lineTo(x+6,y+6);c.moveTo(x+6,y-6);c.lineTo(x-6,y+6);c.stroke()}
+function ground(c,w,y){c.strokeStyle=css("--ink");c.lineWidth=2;c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke();
+  c.strokeStyle=css("--line");c.lineWidth=1;for(let x=-10;x<w;x+=12){c.beginPath();c.moveTo(x,y+12);c.lineTo(x+10,y+2);c.stroke()}}
+function label(c,t,x,y,col,align="left"){c.font="600 13px "+css("--f-mono");c.fillStyle=col;c.textAlign=align;c.fillText(t,x,y)}
+
+/* --- 1 poids --- */
+function drawPoids(){const {c,w,h}=setup($("cvPoids"));const m=+$("pMasse").value/1000,g=+$("pAstre").value,P=m*g;
+  $("pMasseO").textContent=Math.round(m*1000)+" g";$("pR1").textContent=fr(m,3)+" kg";$("pR2").textContent=fr(P)+" N";
+  const gy=h*0.42;ground(c,w,gy);const s=Math.cbrt(m)*70+10;const x=w/2;
+  c.fillStyle=css("--surface");c.strokeStyle=css("--ink");c.lineWidth=2;c.fillRect(x-s/2,gy-s,s,s);c.strokeRect(x-s/2,gy-s,s,s);
+  const Gy=gy-s/2;const len=Math.min(h-gy-30+s/2,P/9.81*120+4);arrow(c,x,Gy,x,Gy+len,css("--force"),3);dot(c,x,Gy,5,css("--brass"));
+  label(c,"P = "+fr(P)+" N",x+14,Gy+len-4,css("--force"));label(c,"G",x+10,Gy-6,css("--brass"));
+  label(c,"longueur de la flèche proportionnelle au poids",10,h-10,css("--muted"))}
+["pMasse","pAstre"].forEach(i=>$(i).addEventListener("input",drawPoids));
+
+/* --- 2a position de G --- */
+function drawG(){const {c,w,h}=setup($("cvG"));const m1=+$("gM1").value,x1=+$("gX1").value,m2=+$("gM2").value,x2=+$("gX2").value;
+  $("gM1O").textContent=m1+" g";$("gM2O").textContent=m2+" g";$("gX1O").textContent=x1+" cm";$("gX2O").textContent=x2+" cm";
+  const xg=(m1*x1+m2*x2)/(m1+m2);const d1=xg-x1,d2=x2-xg;
+  $("gR1").textContent=fr(xg,1)+" cm";$("gR2").textContent="A : "+fr(d1,1)+" · B : "+fr(d2,1);
+  const r=m2/m1;$("gTxt").innerHTML=m1===m2?"Masses égales : G est <b>au milieu</b> de A et B.":
+    (r>1?"B est "+fr(r,r%1?1:0)+" fois plus lourde que A : G est "+fr(r,r%1?1:0)+" fois plus près de B.":"A est "+fr(1/r,(1/r)%1?1:0)+" fois plus lourde que B : G est "+fr(1/r,(1/r)%1?1:0)+" fois plus près de A.");
+  const pad=34,sc=(w-2*pad)/30,X=v=>pad+v*sc,ry=h*0.5;
+  // règle
+  c.fillStyle=css("--surface");c.strokeStyle=css("--ink");c.lineWidth=1.5;c.fillRect(X(0),ry,30*sc,12);c.strokeRect(X(0),ry,30*sc,12);
+  c.font="11px "+css("--f-mono");c.textAlign="center";c.fillStyle=css("--muted");
+  for(let k=0;k<=30;k++){c.fillStyle=css("--ink");c.fillRect(X(k)-0.5,ry,1,k%5?4:8);if(k%5===0&&Math.abs(k-(m1*x1+m2*x2)/(m1+m2))>1.6){c.fillStyle=css("--muted");c.fillText(k,X(k),ry+26)}}
+  // masses
+  const blk=(x,m,n)=>{const s=14+Math.sqrt(m)*2.2;c.fillStyle=css("--ink");c.fillRect(X(x)-s/2,ry-s,s,s);
+    arrow(c,X(x),ry-s/2,X(x),ry-s/2+m/400*60+30,css("--force"),2.5);c.fillStyle=css("--ink");c.font="700 12px "+css("--f-mono");c.fillText(n+" · "+m+" g",X(x),ry-s-8)};
+  blk(x1,m1,"A");blk(x2,m2,"B");
+  // doigt / appui sous G
+  const gx=X(xg);c.fillStyle=css("--brass");c.beginPath();c.moveTo(gx,ry+13);c.lineTo(gx-14,ry+48);c.lineTo(gx+14,ry+48);c.closePath();c.fill();
+  label(c,"G",gx,ry+66,css("--brass"),"center");
+  // cotes
+  const cy=ry-h*0.33;c.strokeStyle=css("--steel");c.lineWidth=1.5;c.setLineDash([4,4]);c.beginPath();c.moveTo(gx,cy-6);c.lineTo(gx,ry);c.stroke();c.setLineDash([]);
+  const cote=(a,b,t)=>{c.strokeStyle=css("--steel");c.beginPath();c.moveTo(a,cy);c.lineTo(b,cy);c.moveTo(a,cy-5);c.lineTo(a,cy+5);c.moveTo(b,cy-5);c.lineTo(b,cy+5);c.stroke();label(c,t,(a+b)/2,cy-8,css("--steel"),"center")};
+  cote(X(x1),gx,fr(d1,1)+" cm");cote(gx,X(x2),fr(d2,1)+" cm")}
+["gM1","gX1","gM2","gX2"].forEach(i=>$(i).addEventListener("input",drawG));
+
+/* --- 2 basculement --- */
+function drawBasc(){const {c,w,h}=setup($("cvBasc"));const b=+$("bLarg").value,hg=+$("bHaut").value,ang=+$("bAng").value*Math.PI/180;
+  $("bLargO").textContent=fr(b,1).replace(",0","")+" cm";$("bHautO").textContent=fr(hg,1).replace(",0","")+" cm";$("bAngO").textContent=Math.round(ang*180/Math.PI)+"°";
+  const crit=Math.atan((b/2)/hg);$("bR1").textContent=Math.round(crit*180/Math.PI)+"°";
+  const H=Math.max(hg*2,hg+3);const sc=Math.min((h-60)/(Math.max(H,b)+2),(w-80)/(b+H*0.8+4));
+  const gy=h-34;ground(c,w,gy);const px=w*0.58;// pivot = arête droite
+  const falls=ang>crit;let A=ang;
+  c.save();c.translate(px,gy);c.rotate(A);// rotation horaire autour de l'arête droite : l'objet penche vers la droite
+  // corps : trapèze/vase
+  c.fillStyle=css("--surface");c.strokeStyle=css("--ink");c.lineWidth=2;c.beginPath();
+  c.moveTo(0,0);c.lineTo(-b*sc,0);c.lineTo(-b*sc+ b*sc*0.15,-H*sc);c.lineTo(-b*sc*0.15,-H*sc);c.closePath();c.fill();c.stroke();
+  c.restore();
+  // G en coordonnées monde
+  const gxL=-b/2*sc,gyL=-hg*sc;const Gx=px+gxL*Math.cos(A)-gyL*Math.sin(A),Gy=gy+gxL*Math.sin(A)+gyL*Math.cos(A);
+  c.setLineDash([5,5]);c.strokeStyle=css("--steel");c.lineWidth=1.5;c.beginPath();c.moveTo(Gx,Gy);c.lineTo(Gx,gy);c.stroke();c.setLineDash([]);
+  arrow(c,Gx,Gy,Gx,Gy+50,css("--force"),3);dot(c,Gx,Gy,6,css("--brass"));label(c,"G",Gx-18,Gy-6,css("--brass"));
+  dot(c,px,gy,4,css("--steel"));label(c,"arête",px+6,gy+18,css("--steel"));
+  // base d'appui
+  if(ang===0){c.strokeStyle=css("--ok");c.lineWidth=5;c.beginPath();c.moveTo(px-b*sc,gy+1);c.lineTo(px,gy+1);c.stroke();label(c,"base d'appui",px-b*sc,gy+20,css("--ok"))}
+  const v=$("bVerdict");
+  if(ang===0){v.className="verdict good";v.textContent="Posé : la verticale de G tombe au milieu de la base.";$("bR2").textContent="stable"}
+  else if(!falls){v.className="verdict good";v.textContent="Lâché, il retombe sur sa base : la verticale de G reste du bon côté de l'arête.";$("bR2").textContent="revient"}
+  else{v.className="verdict bad";v.textContent="Il bascule : la verticale de G est passée au-delà de l'arête.";$("bR2").textContent="bascule"}}
+["bLarg","bHaut","bAng"].forEach(i=>$(i).addEventListener("input",drawBasc));
+
+/* --- 3 balançoire --- */
+let balAng=0,balTarget=0,balRaf=0;
+function balUpdate(){const m1=+$("m1").value,d1=+$("d1").value,m2=+$("m2").value,d2=+$("d2").value,g=9.81;
+  $("m1O").textContent=m1+" kg";$("m2O").textContent=m2+" kg";$("d1O").textContent=fr(d1)+" m";$("d2O").textContent=fr(d2)+" m";
+  const M1=m1*g*d1,M2=m2*g*d2;$("balR1").textContent=fr(M1,0)+" N·m";$("balR2").textContent=fr(M2,0)+" N·m";
+  const v=$("balVerdict");const diff=M2-M1;
+  if(Math.abs(diff)<1e-6){v.className="verdict good";v.textContent="Équilibre : les deux moments sont égaux ("+fr(M1,0)+" N·m).";balTarget=0}
+  else if(diff>0){v.className="verdict bad";v.textContent="Le côté droit l'emporte : la balançoire tourne vers la droite.";balTarget=0.2}
+  else{v.className="verdict bad";v.textContent="Le côté gauche l'emporte : la balançoire tourne vers la gauche.";balTarget=-0.2}
+  if(reduce){balAng=balTarget;drawBal()}else if(!balRaf)balRaf=requestAnimationFrame(balAnim)}
+function balAnim(){balAng+=(balTarget-balAng)*0.12;drawBal();if(Math.abs(balTarget-balAng)>0.001)balRaf=requestAnimationFrame(balAnim);else{balAng=balTarget;drawBal();balRaf=0}}
+function drawBal(){const {c,w,h}=setup($("cvBal"));const m1=+$("m1").value,d1=+$("d1").value,m2=+$("m2").value,d2=+$("d2").value;
+  const gy=h-30;ground(c,w,gy);const cx=w/2,cy=gy-70;const sc=Math.min((w-40)/4.4,120);
+  c.fillStyle=css("--steel");c.beginPath();c.moveTo(cx,cy);c.lineTo(cx-26,gy);c.lineTo(cx+26,gy);c.closePath();c.fill();
+  c.save();c.translate(cx,cy);c.rotate(balAng);
+  c.fillStyle=css("--surface");c.strokeStyle=css("--ink");c.lineWidth=2;c.fillRect(-2.1*sc,-6,4.2*sc,8);c.strokeRect(-2.1*sc,-6,4.2*sc,8);
+  c.fillStyle=css("--muted");c.font="11px "+css("--f-mono");c.textAlign="center";
+  for(let k=-2;k<=2;k+=0.25){c.fillRect(k*sc-0.5,2,1,k%1===0?7:4);if(k%1===0&&k!==0)c.fillText(Math.abs(k)+" m",k*sc,22)}
+  const blk=(x,m,col)=>{const s=12+Math.sqrt(m)*4;c.fillStyle=col;c.fillRect(x-s/2,-6-s,s,s);c.fillStyle=css("--paper");c.font="700 12px "+css("--f-mono");c.fillText(m,x,-6-s/2+4);return s};
+  const s1=blk(-d1*sc,m1,css("--ink")),s2=blk(d2*sc,m2,css("--ink"));
+  c.restore();
+  const p=(x,y)=>[cx+x*Math.cos(balAng)-y*Math.sin(balAng),cy+x*Math.sin(balAng)+y*Math.cos(balAng)];
+  let [x1,y1]=p(-d1*sc,-6-s1/2),[x2,y2]=p(d2*sc,-6-s2/2);
+  arrow(c,x1,y1,x1,y1+m1*1.6+20,css("--force"),2.5);arrow(c,x2,y2,x2,y2+m2*1.6+20,css("--force"),2.5);
+  label(c,"d₁ = "+fr(d1)+" m",10,20,css("--muted"));label(c,"d₂ = "+fr(d2)+" m",w-10,20,css("--muted"),"right")}
+["m1","d1","m2","d2"].forEach(i=>$(i).addEventListener("input",balUpdate));
+
+/* --- 4 culbuto --- */
+const CU={R:0.04,mBase:0.06,dBase:0.015,dTop:-0.036,th:30*Math.PI/180,om:0,run:false,lying:false,raf:0,last:0};
+function cuParams(){const mt=+$("cTop").value/1000,ml=+$("cLest").value/1000,pos=+$("cPos").value/100;// pos : -1 = sommet de la tête, 0 = au niveau de C, 0.9 = fond
+  const bL=pos>=0?pos*CU.R:pos*0.085;// au-dessus de C, jusqu'à 8,5 cm
+  const M=CU.mBase+mt+ml;const d=(CU.mBase*CU.dBase+mt*CU.dTop+ml*bL)/M;return {mt,ml,bL,M,d}}
+function cuLabels(){const p=+$("cPos").value;$("cTopO").textContent=$("cTop").value+" g";$("cLestO").textContent=$("cLest").value+" g";
+  $("cPosO").textContent=p>=70?"au fond":p>=10?"dans la base":p>-10?"au niveau de C":p>-70?"dans le corps":"dans la tête";
+  $("cAngO").textContent=$("cAng").value+"°"}
+function cuInfo(){const {M,d}=cuParams();const g=9.81;
+  $("cR1").textContent=(d>=0?fr(d*100,1)+" cm sous C":fr(-d*100,1)+" cm au-dessus");
+  $("cR2").textContent=fr(M*g*Math.abs(d)*Math.sin(Math.abs(CU.th))*1000,1)+" mN·m";
+  const v=$("cVerdict");
+  if(Math.abs(d)<0.0008){v.className="verdict mid";v.textContent="G ≈ C : équilibre indifférent, il reste où on le pose."}
+  else if(d>0){v.className="verdict good";v.textContent="G sous C : le moment du poids ramène le culbuto. Il se relève."}
+  else{v.className="verdict bad";v.textContent="G au-dessus de C : le moment du poids aggrave l'inclinaison. Il tombe."}}
+function drawCul(){const {c,w,h}=setup($("cvCul"));const {ml,mt,bL,d}=cuParams();const R=CU.R;
+  const s=Math.min((h-40)/(R*3.4),(w-60)/(R*2+R*2.6));const Rp=R*s;const gy=h-28;ground(c,w,gy);
+  const x0=w/2;const th=CU.th;const Cx=x0+R*th*s,Cy=gy-Rp;
+  c.save();c.translate(Cx,Cy);c.rotate(th);
+  // corps
+  c.fillStyle=css("--surface");c.strokeStyle=css("--ink");c.lineWidth=2;
+  c.beginPath();c.moveTo(-Rp,0);c.arc(0,0,Rp,Math.PI,0,true);c.quadraticCurveTo(Rp*0.95,-Rp*0.9,Rp*0.42,-Rp*1.12);c.lineTo(-Rp*0.42,-Rp*1.12);c.quadraticCurveTo(-Rp*0.95,-Rp*0.9,-Rp,0);c.closePath();c.fill();c.stroke();
+  c.beginPath();c.arc(0,-Rp*1.55,Rp*0.5,0,7);c.fill();c.stroke();
+  // base pleine hachurée
+  c.save();c.beginPath();c.arc(0,0,Rp,0,Math.PI);c.closePath();c.clip();c.strokeStyle=css("--line");c.lineWidth=1;for(let k=-Rp*2;k<Rp*2;k+=8){c.beginPath();c.moveTo(k,0);c.lineTo(k+Rp,Rp);c.stroke()}c.restore();
+  c.strokeStyle=css("--ink");c.beginPath();c.moveTo(-Rp,0);c.lineTo(Rp,0);c.stroke();
+  // yeux
+  c.fillStyle=css("--ink");dot(c,-Rp*0.17,-Rp*1.6,2.5,css("--ink"));dot(c,Rp*0.17,-Rp*1.6,2.5,css("--ink"));
+  if(ml>0){dot(c,0,bL*s,4+Math.sqrt(ml*1000)*0.9,css("--muted"));}
+  c.restore();
+  // repères
+  const P={x:Cx,y:gy};const Gx=Cx-d*s*Math.sin(th),Gy=Cy+d*s*Math.cos(th);
+  c.setLineDash([4,4]);c.strokeStyle=css("--steel");c.lineWidth=1.3;c.beginPath();c.moveTo(Cx,Cy);c.lineTo(P.x,P.y);c.stroke();
+  c.strokeStyle=css("--force");c.beginPath();c.moveTo(Gx,gy-2);c.lineTo(Gx,Gy);c.stroke();c.setLineDash([]);
+  if(Math.abs(Gx-P.x)>3){c.strokeStyle=css("--brass");c.lineWidth=2;c.beginPath();c.moveTo(P.x,gy-5);c.lineTo(Gx,gy-5);c.stroke();label(c,"bras de levier",(P.x+Gx)/2,gy-10,css("--brass"),"center")}
+  cross(c,Cx,Cy,css("--steel"));label(c,"C",Cx+9,Cy-6,css("--steel"));
+  arrow(c,Gx,Gy,Gx,Gy+55,css("--force"),3);dot(c,Gx,Gy,6,css("--brass"));label(c,"G",Gx-18,Gy+4,css("--brass"));
+  dot(c,P.x,P.y,4,css("--ink"));
+  if(CU.lying)label(c,"couché !",w-10,22,css("--force"),"right")}
+function cuStep(t){if(!CU.run)return;const dt=Math.min(0.04,(t-CU.last)/1000||0.016);CU.last=t;const {M,d}=cuParams();const R=CU.R,g=9.81;
+  const IP=M*(0.35*R*R+(R-d)*(R-d));const sub=8;
+  for(let i=0;i<sub;i++){const a=-(M*g*d*Math.sin(CU.th))/IP-2.2*CU.om;CU.om+=a*dt/sub;CU.th+=CU.om*dt/sub;
+    if(Math.abs(CU.th)>=75*Math.PI/180){CU.th=Math.sign(CU.th)*75*Math.PI/180;CU.om=0;CU.run=false;CU.lying=true;break}}
+  cuInfo();drawCul();
+  if(CU.run&&Math.abs(CU.om)<0.004&&Math.abs(CU.th)<0.004){CU.run=false;CU.th=0;drawCul()}
+  if(CU.run)CU.raf=requestAnimationFrame(cuStep)}
+function cuGo(){CU.lying=false;CU.th=+$("cAng").value*Math.PI/180;CU.om=0;CU.run=true;CU.last=performance.now();cancelAnimationFrame(CU.raf);CU.raf=requestAnimationFrame(cuStep)}
+$("cGo").addEventListener("click",cuGo);
+$("cReset").addEventListener("click",()=>{CU.run=false;CU.lying=false;CU.th=0;CU.om=0;cuInfo();drawCul()});
+["cTop","cLest","cPos"].forEach(i=>$(i).addEventListener("input",()=>{cuLabels();if(!CU.run){CU.lying=false;CU.th=+$("cAng").value*Math.PI/180}cuInfo();drawCul()}));
+$("cAng").addEventListener("input",()=>{cuLabels();CU.run=false;CU.lying=false;CU.th=+$("cAng").value*Math.PI/180;CU.om=0;cuInfo();drawCul()});
+
+/* --- 5 toupie --- */
+const TP={run:false,w:0,phi:0.6,psi:0,th:9*Math.PI/180,t:0,fast:1,raf:0,last:0,fallen:false};
+function tpParams(){const forme=$("tForme").value,R=+$("tR").value/100,m=+$("tM").value/1000,h=+$("tH").value/100,rt=+$("tPointe").value,w0=+$("tW").value*2*Math.PI/60;
+  const I3=forme==="anneau"?m*R*R:0.5*m*R*R;const I1=(forme==="anneau"?0.5:0.25)*m*R*R+m*h*h;const g=9.81;
+  const wc=Math.sqrt(4*I1*m*g*h)/I3;const alpha=0.3*m*g*rt/I3;return {forme,R,m,h,w0,I3,I1,wc,alpha,g}}
+function tpLabels(){$("tRO").textContent=fr(+$("tR").value,1)+" cm";$("tMO").textContent=$("tM").value+" g";$("tHO").textContent=fr(+$("tH").value,1)+" cm";$("tWO").textContent=$("tW").value+" tr/min"}
+function tpInfo(){const p=tpParams();const w=TP.run||TP.t>0?TP.w:p.w0;
+  $("tR1").textContent=(p.I3*1e6).toFixed(1).replace(".",",")+"×10⁻⁶ kg·m²";
+  $("tR2").textContent=(p.I3*w*1e3).toFixed(2).replace(".",",")+"×10⁻³ kg·m²/s";
+  $("tR3").textContent=Math.round(w*60/(2*Math.PI))+" tr/min";
+  const Om=w>0?p.m*p.g*p.h/(p.I3*w):Infinity;$("tR4").textContent=isFinite(Om)&&!TP.fallen?fr(2*Math.PI/Om,1)+" s":"—";
+  $("tR5").textContent=Math.round(p.wc*60/(2*Math.PI))+" tr/min";
+  const dur=p.w0>p.wc?(p.w0-p.wc)/p.alpha:0;$("tR6").textContent=dur>0?Math.round(dur)+" s":"tombe aussitôt"}
+function tpProj(X,Y,Z,o){return [o.cx+o.s*(X+0.25*Y),o.gy-o.s*(Z+0.32*Y)]}
+function drawTop(){const {c,w,h}=setup($("cvTop"));const p=tpParams();const gy=h-46;
+  const s=Math.min((w-40)/(0.16),(h-70)/(0.10));const o={cx:w/2,gy,s};
+  // sol
+  c.fillStyle=css("--grid");c.beginPath();c.ellipse(o.cx,gy,Math.min(w*0.45,s*0.09),Math.min(30,s*0.025),0,0,7);c.fill();
+  const th=TP.th,ph=TP.phi;const u=[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];
+  let e1=[-Math.sin(ph),Math.cos(ph),0];if(th<1e-3)e1=[1,0,0];const e2=[u[1]*e1[2]-u[2]*e1[1],u[2]*e1[0]-u[0]*e1[2],u[0]*e1[1]-u[1]*e1[0]];
+  const at=(k,a,r)=>[u[0]*k+r*(Math.cos(a)*e1[0]+Math.sin(a)*e2[0]),u[1]*k+r*(Math.cos(a)*e1[1]+Math.sin(a)*e2[1]),u[2]*k+r*(Math.cos(a)*e1[2]+Math.sin(a)*e2[2])];
+  // ombre
+  c.fillStyle=css("--line");c.beginPath();const sh=tpProj(u[0]*p.h,u[1]*p.h,0,o);c.ellipse(sh[0],gy-0.32*s*u[1]*p.h,p.R*s,p.R*s*0.3,0,0,7);c.fill();
+  // cône de précession (repère)
+  if(!TP.fallen&&TP.t>0){c.setLineDash([3,4]);c.strokeStyle=css("--muted");c.lineWidth=1;c.beginPath();
+    for(let a=0;a<=6.3;a+=0.2){const q=[Math.sin(th)*Math.cos(a)*(p.h+0.03),Math.sin(th)*Math.sin(a)*(p.h+0.03),Math.cos(th)*(p.h+0.03)];const P2=tpProj(q[0],q[1],q[2],o);a===0?c.moveTo(P2[0],P2[1]):c.lineTo(P2[0],P2[1])}c.stroke();c.setLineDash([])}
+  const tip=tpProj(0,0,0,o);const t2=0.004;
+  const axTop=tpProj(...at(p.h+0.025,0,0),o),axLow=tpProj(...at(p.h-t2,0,0),o);
+  c.strokeStyle=css("--ink");c.lineWidth=4;c.lineCap="round";c.beginPath();c.moveTo(tip[0],tip[1]);c.lineTo(axLow[0],axLow[1]);c.stroke();
+  const face=(k,fill)=>{c.beginPath();for(let i=0;i<=48;i++){const P2=tpProj(...at(k,i/48*6.2832,p.R),o);i?c.lineTo(P2[0],P2[1]):c.moveTo(P2[0],P2[1])}
+    if(p.forme==="anneau"){for(let i=48;i>=0;i--){const P2=tpProj(...at(k,i/48*6.2832,p.R*0.72),o);i===48?c.moveTo(P2[0],P2[1]):c.lineTo(P2[0],P2[1])}}
+    c.closePath();c.fillStyle=fill;c.fill("evenodd");c.strokeStyle=css("--ink");c.lineWidth=1.5;c.stroke()};
+  face(p.h-t2,css("--muted"));
+  // bord
+  c.strokeStyle=css("--ink");c.lineWidth=1;for(let i=0;i<48;i+=2){const a=i/48*6.2832;const A=tpProj(...at(p.h-t2,a,p.R),o),B=tpProj(...at(p.h+t2,a,p.R),o);c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke()}
+  face(p.h+t2,css("--brass"));
+  if(p.forme==="anneau"){c.strokeStyle=css("--ink");c.lineWidth=2;for(let k=0;k<3;k++){const a=TP.psi+k*2.094;const A=tpProj(...at(p.h,a,0.003),o),B=tpProj(...at(p.h,a,p.R*0.72),o);c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke()}}
+  c.strokeStyle=css("--paper");c.lineWidth=2.5;for(let k=0;k<4;k++){const a=TP.psi+k*1.5708;const A=tpProj(...at(p.h+t2,a,p.R*(p.forme==="anneau"?0.76:0.25)),o),B=tpProj(...at(p.h+t2,a,p.R*0.95),o);c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke()}
+  c.strokeStyle=css("--ink");c.lineWidth=4;c.beginPath();const axUp=tpProj(...at(p.h+t2,0,0),o);c.moveTo(axUp[0],axUp[1]);c.lineTo(axTop[0],axTop[1]);c.stroke();c.lineCap="butt";
+  if($("tVec").checked){const G=tpProj(...at(p.h,0,0),o);
+    const Lk=0.025+Math.min(0.03,TP.w/300*0.03);const Le=tpProj(...at(p.h+0.03+Lk,0,0),o);arrow(c,axTop[0],axTop[1],Le[0],Le[1],css("--steel"),3);label(c,"L",Le[0]+8,Le[1],css("--steel"));
+    arrow(c,G[0],G[1],G[0],G[1]+42,css("--force"),2.5);
+    if(th>0.01&&!TP.fallen){const dir=[-Math.sin(ph),Math.cos(ph),0];const T=tpProj(dir[0]*0.03,dir[1]*0.03,0,o);arrow(c,tip[0],tip[1],T[0],T[1],css("--ok"),2.5);label(c,"moment",T[0]+6,T[1]+14,css("--ok"))}}
+  label(c,"t = "+fr(TP.t,1)+" s"+(TP.fast>1?"  (×4)":""),12,h-12,css("--muted"))}
+function tpStep(t){if(!TP.run)return;let dt=Math.min(0.05,(t-TP.last)/1000||0.016);TP.last=t;dt*=TP.fast;const p=tpParams();
+  TP.t+=dt;TP.w=Math.max(0,TP.w-p.alpha*dt);
+  let Om=TP.w>0?p.m*p.g*p.h/(p.I3*TP.w):30;Om=Math.min(Om,30);
+  if(TP.w<p.wc){const k=2.5*(1-TP.w/p.wc)+0.25;TP.th+=TP.th*k*dt}
+  TP.phi+=Om*dt;TP.psi+=Math.min(TP.w,14)*dt/TP.fast;
+  const v=$("tVerdict");
+  if(TP.th>=1.3||TP.w<=0){TP.th=1.35;TP.run=false;TP.fallen=true;v.className="verdict bad";v.textContent="Tombée après "+fr(TP.t,1)+" s.";$("tGo").textContent="Relancer"}
+  else if(TP.w<p.wc){v.className="verdict bad";v.textContent="Sous la vitesse critique : la précession s'emballe, l'axe se couche."}
+  else{v.className="verdict good";v.textContent="L est grand : le moment du poids fait seulement tourner l'axe (précession)."}
+  tpInfo();drawTop();if(TP.run)TP.raf=requestAnimationFrame(tpStep)}
+function tpGo(){const p=tpParams();TP.w=p.w0;TP.t=0;TP.th=9*Math.PI/180;TP.phi=0.6;TP.fallen=false;TP.run=true;TP.last=performance.now();$("tGo").textContent="Relancer";cancelAnimationFrame(TP.raf);TP.raf=requestAnimationFrame(tpStep)}
+$("tGo").addEventListener("click",tpGo);
+$("tFast").addEventListener("click",()=>{TP.fast=TP.fast===1?4:1;$("tFast").textContent=TP.fast===1?"Accéléré ×4":"Temps réel";if(!TP.run)drawTop()});
+$("tVec").addEventListener("change",()=>{if(!TP.run)drawTop()});
+["tForme","tR","tM","tH","tPointe","tW"].forEach(i=>$(i).addEventListener("input",()=>{tpLabels();if(!TP.run){TP.t=0;TP.fallen=false;TP.th=9*Math.PI/180;$("tVerdict").className="verdict mid";$("tVerdict").textContent="Réglez puis lancez."}tpInfo();drawTop()}));
+
+/* --- 5a schéma animé de la précession --- */
+const PR={mode:0,t:0,last:0,raf:0,th:0.22,om:0,ph:0.5,psi:0,hold:0};
+const PRTXT=[
+ ["Sans rotation : elle tombe","Le poids P, appliqué en G, crée un moment autour de la pointe (flèche verte courbe). Rien ne s'y oppose : la toupie tourne autour de sa pointe, vers le sol. C'est le basculement de la partie 2."],
+ ["En rotation : l'axe tourne au lieu de tomber","La toupie possède un moment cinétique L, porté par son axe. Le moment du poids (flèche verte, au niveau de la pointe) est horizontal et perpendiculaire à L. Il ne rabat pas L vers le sol : il le pousse sur le côté. L'axe décrit un cône autour de la verticale : c'est la précession."],
+ ["Au ralenti : des petits pas de côté","À chaque instant, le moment du poids ajoute à L un petit morceau ΔL, dans sa propre direction, donc horizontal. Mis bout à bout, ces petits morceaux font tourner la pointe de L en rond, sans jamais la faire descendre. Plus L est grand, plus chaque ΔL le fait peu tourner : la précession est lente."]];
+function prSet(m){PR.mode=m;PR.t=0;PR.th=m===0?0.22:0.42;PR.om=0;PR.ph=0.5;PR.hold=0;
+  $("precTitle").textContent=PRTXT[m][0];$("precTxt").textContent=PRTXT[m][1];
+  document.querySelectorAll("[data-pm]").forEach(b=>b.classList.toggle("ghost",+b.dataset.pm!==m));
+  if(reduce){drawPrec()}else{cancelAnimationFrame(PR.raf);PR.last=performance.now();PR.raf=requestAnimationFrame(prStep)}}
+function prStep(t){const dt=Math.min(0.05,(t-PR.last)/1000||0.016);PR.last=t;PR.t+=dt;PR.psi+=6*dt;
+  if(PR.mode===0){if(PR.th<1.3){PR.om+=2.2*Math.sin(PR.th)*dt;PR.th=Math.min(1.3,PR.th+PR.om*dt)}else{PR.hold+=dt;if(PR.hold>1.6){PR.th=0.22;PR.om=0;PR.hold=0}}}
+  else if(PR.mode===1){PR.ph+=0.7*dt}
+  else{PR.ph=0.5+Math.floor(PR.t/1.3)*0.52;if(PR.t>1.3*12.5)PR.t=0}
+  drawPrec();PR.raf=requestAnimationFrame(prStep)}
+function drawPrec(){const {c,w,h}=setup($("cvPrec"));const gy=h-50,s=Math.min(h/2.6,w/3.4),cx=w*0.5;
+  const P=(X,Y,Z)=>[cx+s*(X+0.28*Y),gy-s*(Z+0.3*Y)];
+  const R=0.62,H=0.95,th=PR.th;
+  const uOf=ph=>[Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)];
+  const u=uOf(PR.ph);let e1=[-Math.sin(PR.ph),Math.cos(PR.ph),0];const e2=[u[1]*e1[2]-u[2]*e1[1],u[2]*e1[0]-u[0]*e1[2],u[0]*e1[1]-u[1]*e1[0]];
+  const at=(k,a,r)=>[0,1,2].map(i=>u[i]*k+r*(Math.cos(a)*e1[i]+Math.sin(a)*e2[i]));
+  // sol + verticale
+  c.fillStyle=css("--grid");c.beginPath();c.ellipse(cx,gy,s*1.15,s*0.33,0,0,7);c.fill();
+  c.setLineDash([4,4]);c.strokeStyle=css("--muted");c.lineWidth=1;c.beginPath();c.moveTo(cx,gy);c.lineTo(cx,gy-s*2.15);c.stroke();
+  const Lk=PR.mode===0?0:1.85;
+  // trajectoire du bout de L (cône)
+  if(PR.mode>0){c.beginPath();for(let a=0;a<=6.35;a+=0.1){const q=P(Math.sin(th)*Math.cos(a)*Lk,Math.sin(th)*Math.sin(a)*Lk,Math.cos(th)*Lk);a?c.lineTo(...q):c.moveTo(...q)}c.stroke()}
+  c.setLineDash([]);
+  // mode ralenti : anciens L et ΔL
+  if(PR.mode===2){const n=Math.floor(PR.t/1.3);for(let k=0;k<n;k++){const a=0.5+k*0.52,b=a+0.52;const ua=uOf(a),ub=uOf(b);
+      const A=P(...ua.map(v=>v*Lk)),B=P(...ub.map(v=>v*Lk));c.strokeStyle=css("--line");c.lineWidth=2;c.beginPath();c.moveTo(...P(0,0,0));c.lineTo(...A);c.stroke();
+      arrow(c,A[0],A[1],B[0],B[1],css("--ok"),2.5)}}
+  // toupie
+  const tip=P(0,0,0);c.strokeStyle=css("--ink");c.lineWidth=4;c.lineCap="round";const lo=P(...at(H-0.05,0,0));c.beginPath();c.moveTo(...tip);c.lineTo(...lo);c.stroke();
+  const face=(k,fill)=>{c.beginPath();for(let i=0;i<=40;i++){const q=P(...at(k,i/40*6.2832,R));i?c.lineTo(...q):c.moveTo(...q)}c.closePath();c.fillStyle=fill;c.fill();c.strokeStyle=css("--ink");c.lineWidth=1.5;c.stroke()};
+  face(H-0.05,css("--muted"));face(H+0.05,css("--brass"));
+  if(PR.mode>0){c.strokeStyle=css("--paper");c.lineWidth=2.5;for(let k=0;k<4;k++){const a=PR.psi+k*1.5708;const A=P(...at(H+0.05,a,R*0.25)),B=P(...at(H+0.05,a,R*0.92));c.beginPath();c.moveTo(...A);c.lineTo(...B);c.stroke()}}
+  const top=P(...at(H+0.4,0,0));c.strokeStyle=css("--ink");c.lineWidth=4;c.beginPath();c.moveTo(...P(...at(H+0.05,0,0)));c.lineTo(...top);c.stroke();c.lineCap="butt";
+  // poids
+  const G=P(...at(H,0,0));arrow(c,G[0],G[1],G[0],G[1]+s*0.55,css("--force"),3);dot(c,G[0],G[1],5,css("--brass"));label(c,"P",G[0]+8,G[1]+s*0.5,css("--force"));
+  if(PR.mode===0){// moment : arc dans le plan vertical, sens de la chute
+    c.strokeStyle=css("--ok");c.lineWidth=2.5;c.beginPath();const pts=[];for(let k=0;k<=12;k++){const a=th+0.12+k*0.06;pts.push(P(Math.sin(a)*Math.cos(PR.ph)*0.55,Math.sin(a)*Math.sin(PR.ph)*0.55,Math.cos(a)*0.55))}
+    pts.forEach((q,i)=>i?c.lineTo(...q):c.moveTo(...q));c.stroke();const a1=pts[11],a2=pts[12];arrow(c,a1[0],a1[1],a2[0]+(a2[0]-a1[0])*2,a2[1]+(a2[1]-a1[1])*2,css("--ok"),2.5);
+    label(c,"elle tombe",a2[0]+14,a2[1],css("--ok"))}
+  else{const Le=P(...u.map(v=>v*Lk));arrow(c,top[0],top[1],Le[0],Le[1],css("--steel"),3.5);label(c,"L",Le[0]+8,Le[1]-4,css("--steel"));
+    const d=[-Math.sin(PR.ph),Math.cos(PR.ph),0];const T=P(d[0]*0.7,d[1]*0.7,0);arrow(c,tip[0],tip[1],T[0],T[1],css("--ok"),3);label(c,"moment du poids",T[0]+6,T[1]+16,css("--ok"));
+    if(PR.mode===1){const D=P(u[0]*Lk+d[0]*0.45,u[1]*Lk+d[1]*0.45,u[2]*Lk);arrow(c,Le[0],Le[1],D[0],D[1],css("--ok"),2.5);label(c,"ΔL",D[0]+6,D[1]-6,css("--ok"))}}
+  dot(c,tip[0],tip[1],3.5,css("--ink"))}
+document.querySelectorAll("[data-pm]").forEach(b=>b.addEventListener("click",()=>prSet(+b.dataset.pm)));
+
+/* --- auto-vérifications --- */
+document.querySelectorAll(".check").forEach(box=>{box.querySelector("button").addEventListener("click",()=>{
+  const sel=box.querySelector("input:checked");const fb=box.querySelector(".fb");
+  if(!sel){fb.className="fb";fb.textContent="Choisissez une réponse.";return}
+  const ok=sel.value===box.dataset.answer;fb.className="fb "+(ok?"ok":"ko");fb.textContent=(ok?"Juste. ":"Pas tout à fait. ")+(ok?box.dataset.ok:box.dataset.ko)})});
+
+/* --- progression --- */
+const done=store.get("done",{});
+function paintSteps(){document.querySelectorAll("#steps a").forEach(a=>a.classList.toggle("done",!!done[a.dataset.k]))}
+document.querySelectorAll("[data-done]").forEach(cb=>{cb.checked=!!done[cb.dataset.done];cb.addEventListener("change",()=>{done[cb.dataset.done]=cb.checked;store.set("done",done);paintSteps()})});
+paintSteps();
+
+/* --- chrono --- */
+let chStart=store.get("chrono",null),chTimer=0;
+function chPaint(){if(chStart===null){$("chronoTxt").textContent="00:00";$("chronoBtn").textContent="Démarrer";return}
+  const s=Math.floor((Date.now()-chStart)/1000);const hh=Math.floor(s/3600),mm=Math.floor(s%3600/60),ss=s%60;
+  $("chronoTxt").textContent=(hh?hh+":"+String(mm).padStart(2,"0"):String(mm).padStart(2,"0"))+":"+String(ss).padStart(2,"0");$("chronoBtn").textContent="Remettre à zéro"}
+$("chronoBtn").addEventListener("click",()=>{if(chStart===null){chStart=Date.now()}else{chStart=null}store.set("chrono",chStart);chPaint()});
+chTimer=setInterval(chPaint,1000);chPaint();
+
+/* --- carnet --- */
+const KF=["kNom","kT1","kT2","kC1","kC2","kRec","kArg"];const kv=store.get("carnet",{});
+KF.forEach(id=>{if(kv[id])$(id).value=kv[id];$(id).addEventListener("input",()=>{kv[id]=$(id).value;store.set("carnet",kv)})});
+$("kCopy").addEventListener("click",()=>{const lab=id=>document.querySelector('label[for="'+id+'"]').textContent;
+  const txt="CARNET DE CONCEPTION · Toupie & Culbuto\n\n"+KF.map(id=>lab(id).toUpperCase()+"\n"+($(id).value.trim()||"(vide)")).join("\n\n");
+  const out=$("kOut");out.value=txt;
+  const fallback=()=>{out.hidden=false;out.focus();out.select();$("kMsg").textContent="Copie automatique impossible : le texte est sélectionné, faites Ctrl+C (ou Cmd+C)."};
+  try{navigator.clipboard.writeText(txt).then(()=>{$("kMsg").textContent="Carnet copié. Collez-le dans Pronote.";out.hidden=true},fallback)}catch(e){fallback()}});
+
+/* --- init + redimensionnement --- */
+function all(){if(typeof drawPrec==="function")drawPrec();drawPoids();drawG();drawBasc();balUpdate();drawBal();cuLabels();cuInfo();drawCul();tpLabels();tpInfo();drawTop()}
+let rz;window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(all,120)});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",all);
+new MutationObserver(all).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(all);
+CU.th=30*Math.PI/180;all();prSet(1);
+})();
+</script>
